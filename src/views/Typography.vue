@@ -9,16 +9,25 @@
       justify="center"
     >
       <v-col cols="12" md="8">
-        <material-card
+        <v-card
+          elevation="2"
+          class="my-5"
           v-for="item in articleList"
           :key="item"
           icon-small
+          :title="item.ARTICLE_NAME"
           color="accent"
         >
-        <template #title>
-            <a @click="toDetail(item.ID)">{{ item.ARTICLE_NAME }}</a>
-          </template>
           <v-simple-table>
+            <v-card-title>
+
+            </v-card-title>
+            <v-card-text>
+              <div class="caption">{{item.DATETIME_CREATED}}</div><br/>
+              <a class="h2" style="font-size:1.5em" @click="toDetail(item.ID)"><font color="#3f51b5">{{ item.ARTICLE_NAME }}</font></a>
+
+              <!-- <div class="h1">{{ item.CONTENT }}</div> -->
+            </v-card-text>
             <v-card-text>
               <v-divider></v-divider>
               <v-chip
@@ -35,7 +44,7 @@
 
 
           </v-simple-table>
-        </material-card>
+        </v-card>
       </v-col>
        <v-col cols="12" md="4">
          <template>
