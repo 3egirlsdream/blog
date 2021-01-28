@@ -33,9 +33,9 @@ const state = {
     //   to: '/components/icons/',
     // },
     // {
-    //   title: 'Google Maps',
+    //   title: 'Markdown Edit',
     //   icon: 'mdi-map-marker',
-    //   to: '/maps/google/',
+    //   to: '/maps/markdown/',
     // },
     // {
     //   title: 'Notifications',
