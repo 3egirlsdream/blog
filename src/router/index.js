@@ -34,7 +34,7 @@ const router = new Router({
       route('Regular Tables'),
 
       // Maps
-      route('Google Maps', null, 'maps/markdown'),
+      route('Markdown', null, 'markdown'),
     ]),
   ],
 })

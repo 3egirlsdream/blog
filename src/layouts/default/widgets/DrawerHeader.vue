@@ -11,7 +11,7 @@
       <v-list-item-title class="text-h5">
         <strong class="mr-1 font-weight-black"></strong>
 
-        <span class="primary--text">从入门到放弃</span>
+        <span class="primary--text"><font color="#fff">从入门到放弃</font></span>
       </v-list-item-title>
     </v-list-item-content>
   </v-list-item>

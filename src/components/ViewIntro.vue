@@ -8,7 +8,7 @@
     <div
       v-if="link"
       class="body-2 font-weight-light"
-    >here full documentation
+    >An ac a day, keep girls away.
     </div>
 
     <v-responsive

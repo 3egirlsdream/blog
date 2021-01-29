@@ -21,7 +21,7 @@ textarea,
 
 textarea {
   border: none;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #fff;
   resize: none;
   outline: none;
   background-color: #fff;
@@ -58,16 +58,29 @@ code {
     </v-row>
     <v-row justify="left">
       <v-col cols="12" md="3">
-        <v-card class="mx-auto">
+        <v-card class="mx-auto" max-width="256">
           <v-navigation-drawer permanent>
             <v-list-item>
-              <v-btn
-                small
-                color="primary"
-                block
-                @click="submit(detail.ID, detail.ARTICLE_NAME)"
-                >更新</v-btn
-              >
+              <v-row>
+                <v-col cols="12" md="6">
+                  <v-btn
+                    small
+                    block
+                    color="primary"
+                    @click="submit(detail.ID, detail.ARTICLE_NAME)"
+                    >更 新</v-btn
+                  >
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-btn
+                    small
+                    block
+                    color="error"
+                    @click="d_create = true"
+                    >新 增</v-btn
+                  >
+                </v-col>
+              </v-row>
             </v-list-item>
 
             <v-divider></v-divider>
@@ -87,7 +100,7 @@ code {
                     color="red"
                     block
                     @click="
-                      (id = item.id),
+                      (id = item.ID),
                         (name = item.ARTICLE_NAME),
                         (dialog = true)
                     "
@@ -166,7 +179,43 @@ code {
             </v-btn>
           </v-card-actions>
         </v-card>
-      </v-dialog>
+    </v-dialog>
+    <v-dialog v-model="d_create" width="60%">
+      <v-form>
+      <v-card height="80vh">
+        <v-card-text style="height:91%">
+          <v-row>
+            <v-col cols="12" md="3">
+        <v-text-field
+          v-model="params.ARTICLE_NAME"
+          label="文章名"
+          required
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" md="3">
+        <v-text-field
+          v-model="params.ARTICLE_CATEGORY"
+          label="分类"
+          required
+        ></v-text-field>
+      </v-col>
+          </v-row>
+          <div id="editor" >
+            <textarea :value="d_input" @input="d_update"></textarea>
+          </div>
+        </v-card-text>
+          <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="d_create = false">
+                取消
+              </v-btn>
+              <v-btn color="green darken-1" text @click="create">
+                提交
+              </v-btn>
+            </v-card-actions>
+        </v-card>
+      </v-form>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -180,38 +229,46 @@ export default {
     API_ALL_ARTICLE: "/api/article/GetAllArticle?user={0}",
     API_EDIT: "/api/article/EditArticle",
     API_GET_CONTENT: "/api/article/id={0}",
-    API_DELETE:"/api/article/Delete?id={0}"
+    API_DELETE:"/api/article/Delete?id={0}",
+    API_NEW_ARTICLE:"/api/article/write"
   },
   data: () => ({
+    d_create:false,
     alert:false,
     dialog: false,
     show: false,
     input: "",
+    d_input:"",
     articleList: [],
     detail: "",
     content: "",
     name: "",
     id: "",
     msg:'',
-    compiledMarkdown:""
+    compiledMarkdown:"",
+    params:{ARTICLE_NAME:'', ARTICLE_CATEGORY:''}
   }),
   methods: {
     update: _.debounce(function(e) {
       this.input = e.target.value;
+    }, 300),
+    d_update: _.debounce(function(e) {
+      this.d_input = e.target.value;
     }, 300),
     deletes() {
       let self = this;
 
       var url = framework.strFormat(
         this.$options.serverUrl.API_DELETE,
-        id
+        this.id
       );
       fsCfg.getData(url, function(res) {
         if (res.success) {
           self.msg = "删除成功！";
           self.alert = true;
+          self.getAllArticle();
         }
-        this.dialog = true;
+        self.dialog = false;
       });
     },
     submit(id, name) {
@@ -232,6 +289,28 @@ export default {
             self.alert = true;
             self.getAllArticle();
 
+          }
+        }
+      );
+    },
+    create(){
+    let self = this;
+      var data = {
+        title: this.params.ARTICLE_NAME,
+        content: this.d_input,
+        user: 'cxk',
+        category: this.params.ARTICLE_CATEGORY
+      };
+
+      fsCfg.postData(
+        this.$options.serverUrl.API_NEW_ARTICLE,
+        JSON.stringify(data),
+        function(res) {
+          if (res.success) {
+            self.msg = "新增成功";
+            self.alert = true;
+            self.getAllArticle();
+            self.d_create = false;
           }
         }
       );
@@ -264,6 +343,12 @@ export default {
     }
   },
   mounted: function() {
+     const link = document.createElement("link");
+    link.type = "text/css";
+    link.rel = "stylesheet";
+    link.href =
+      "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.css";
+    document.head.appendChild(link);
     this.getAllArticle();
   }
 };
