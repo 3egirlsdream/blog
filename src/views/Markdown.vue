@@ -41,19 +41,45 @@ code {
       <v-col cols="12" md="2">
         <v-switch v-model="show" label="预览"></v-switch>
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" md="6">
         <v-text-field
           v-model="detail.ARTICLE_NAME"
           label="文章名"
           required
         ></v-text-field>
       </v-col>
-      <v-col cols="12" md="3">
-        <v-text-field
-          v-model="detail.ARTICLE_CATEGORY"
-          label="分类"
-          required
-        ></v-text-field>
+    </v-row>
+    <v-row justify="center">
+      <v-col cols="12" md="2"> </v-col>
+      <v-col cols="12" md="8">
+  <v-combobox
+    v-model="tags"
+    :items="categories"
+    chips
+    clearable
+    label="categries"
+    multiple
+    prepend-icon="mdi-filter-variant"
+    solo
+  >
+    <template v-slot:selection="{ attrs, item, select, selected, index }">
+      <v-chip
+        v-bind="attrs"
+        :input-value="selected"
+        close
+        label
+        text-color="white"
+        :color="color[index]"
+        @click="select"
+        @click:close="remove(item)"
+      >
+      <v-icon left>
+        mdi-label
+      </v-icon>
+        <font>{{ item }}</font>&nbsp;
+      </v-chip>
+    </template>
+  </v-combobox>
       </v-col>
     </v-row>
     <v-row justify="left">
@@ -76,7 +102,7 @@ code {
                     small
                     block
                     color="error"
-                    @click="d_create = true"
+                    @click="d_create = true, tags = []"
                     >新 增</v-btn
                   >
                 </v-col>
@@ -180,10 +206,9 @@ code {
           </v-card-actions>
         </v-card>
     </v-dialog>
-    <v-dialog v-model="d_create" width="60%">
-      <v-form>
-      <v-card height="80vh">
-        <v-card-text style="height:91%">
+    <v-dialog v-model="d_create" width="60%" height="80vh">
+      <v-card class="py-2">
+        <v-card-text >
           <v-row>
             <v-col cols="12" md="3">
         <v-text-field
@@ -192,29 +217,51 @@ code {
           required
         ></v-text-field>
       </v-col>
-      <v-col cols="12" md="3">
-        <v-text-field
-          v-model="params.ARTICLE_CATEGORY"
-          label="分类"
-          required
-        ></v-text-field>
+      <v-col cols="12" md="8">
+         <v-combobox
+    v-model="tags"
+    :items="categories"
+    chips
+    clearable
+    label="categries"
+    multiple
+    prepend-icon="mdi-filter-variant"
+    solo
+  >
+    <template v-slot:selection="{ attrs, item, select, selected, index }">
+      <v-chip
+        v-bind="attrs"
+        :input-value="selected"
+        close
+        label
+        text-color="white"
+        :color="color[index]"
+        @click="select"
+        @click:close="remove(item)"
+      >
+      <v-icon left>
+        mdi-label
+      </v-icon>
+        <font>{{ item }}</font>&nbsp;
+      </v-chip>
+    </template>
+  </v-combobox>
       </v-col>
           </v-row>
-          <div id="editor" >
-            <textarea :value="d_input" @input="d_update"></textarea>
+          <div id="editor" style="height:70vh">
+            <textarea style="height:100%" :value="d_input" @input="d_update"></textarea>
           </div>
         </v-card-text>
           <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="d_create = false">
+            <v-spacer></v-spacer>
+              <v-btn small color="green darken-1" @click="d_create = false">
                 取消
               </v-btn>
-              <v-btn color="green darken-1" text @click="create">
+              <v-btn small color="primary darken-1" @click="create">
                 提交
               </v-btn>
             </v-card-actions>
         </v-card>
-      </v-form>
     </v-dialog>
   </v-container>
 </template>
@@ -233,6 +280,8 @@ export default {
     API_NEW_ARTICLE:"/api/article/write"
   },
   data: () => ({
+    tags:[],
+    categories:[],
     d_create:false,
     alert:false,
     dialog: false,
@@ -246,7 +295,8 @@ export default {
     id: "",
     msg:'',
     compiledMarkdown:"",
-    params:{ARTICLE_NAME:'', ARTICLE_CATEGORY:''}
+    params:{ARTICLE_NAME:'', ARTICLE_CATEGORY:''},
+    color:["#8bc34a", "#673ab7", "#ff9800", "#f44336", "#E09F7D", "#EF5D60", "#EC4067", "#311847", "#163438"]
   }),
   methods: {
     update: _.debounce(function(e) {
@@ -255,6 +305,10 @@ export default {
     d_update: _.debounce(function(e) {
       this.d_input = e.target.value;
     }, 300),
+    remove (item) {
+        this.tags.splice(this.tags.indexOf(item), 1)
+        this.tags = [...this.tags]
+      },
     deletes() {
       let self = this;
 
@@ -324,6 +378,13 @@ export default {
       fsCfg.getData(url, function(res) {
         if (res.success) {
           self.articleList = res.data;
+          for (let index = 0; index < res.data.length; index++) {
+            const element = res.data[index];
+            var ca = element.ARTICLE_CATEGORY.split(";");
+              ca.forEach(x => {
+                if (!self.categories.includes(x)) self.categories.push(x);
+              });
+          }
         }
       });
     },
@@ -338,6 +399,7 @@ export default {
           self.detail = res.data;
           self.input = self.detail.CONTENT;
           self.compiledMarkdown = marked(self.detail.CONTENT);
+          self.tags = self.detail.ARTICLE_CATEGORY.split(';');
         }
       });
     }
@@ -350,6 +412,20 @@ export default {
       "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.css";
     document.head.appendChild(link);
     this.getAllArticle();
+  },
+  watch:{
+    tags(){
+      var ac = "";
+      for (let index = 0; index < this.tags.length; index++) {
+        const element = this.tags[index];
+        if(index != this.tags.length - 1){
+          ac = ac + element + ";";
+        }
+        else ac = ac + element;
+      };
+      this.detail.ARTICLE_CATEGORY = ac;
+      this.params.ARTICLE_CATEGORY = ac;
+    }
   }
 };
 </script>

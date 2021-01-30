@@ -72,7 +72,7 @@ export default {
     return {
       detail:[],
       articleList: [],
-      color:["#8bc34a", "#673ab7", "#ff9800", "#f44336"]
+      color:["#8bc34a", "#673ab7", "#ff9800", "#f44336", "#E09F7D", "#EF5D60", "#EC4067", "#311847", "#163438"]
     };
   },
   methods: {

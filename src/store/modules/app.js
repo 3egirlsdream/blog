@@ -1,6 +1,7 @@
 // Pathify
 import { make } from 'vuex-pathify'
-
+//material icon
+//https://pictogrammers.github.io/@mdi/font/5.4.55/
 // Data
 const state = {
   drawer: null,
@@ -9,12 +10,12 @@ const state = {
   items: [
     {
       title: '主页',
-      icon: 'mdi-clipboard-outline',
+      icon: 'mdi-home',
       to: '/',
     },
     {
       title: '分类',
-      icon: 'mdi-format-font',
+      icon: 'mdi-arrange-bring-forward',
       to: '/components/typography/',
     },
     // {

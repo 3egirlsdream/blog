@@ -4,18 +4,20 @@
     v-model="drawer"
     :dark="dark"
     :right="$vuetify.rtl"
-    :src="drawerImage ? image : ''"
+    :src="img"
     :mini-variant.sync="mini"
     mini-variant-width="80"
     app
     width="260"
   >
+
+    <!-- 半模糊效果 -->
     <template
       v-if="drawerImage"
       #img="props"
     >
       <v-img
-        :key="image"
+        :key="img"
         :gradient="gradient"
         v-bind="props"
       />
@@ -68,6 +70,7 @@
     name: 'DefaultDrawer',
     data(){
       return {
+        img:"https://cdn.wallpaperhub.app/cloudcache/c/e/3/6/2/4/ce3624266c5a226ab8d18e6245f66eabd215c2aa.jpg"
         // items:["a", "b"]
       }
     },
