@@ -40,7 +40,7 @@
       </v-col>
       <v-col cols="12" md="4">
         <template>
-          <v-card class="pa-12" color="indigo darken-2" flat>
+          <v-card class="pa-12 my-5" color="indigo darken-2" flat>
             <v-card elevation="12" width="256">
               <v-navigation-drawer floating permanent>
                 <v-list dense rounded>
