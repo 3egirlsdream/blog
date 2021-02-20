@@ -37,11 +37,11 @@ code {
 <template>
   <v-container id="google-maps-view" fluid tag="section">
     <v-row justify="center">
-      <v-col cols="12" md="2"> </v-col>
+
       <v-col cols="12" md="2">
         <v-switch v-model="show" label="预览"></v-switch>
       </v-col>
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="7">
         <v-text-field
           v-model="detail.ARTICLE_NAME"
           label="文章名"
@@ -50,36 +50,54 @@ code {
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="12" md="2"> </v-col>
-      <v-col cols="12" md="8">
-  <v-combobox
-    v-model="tags"
-    :items="categories"
-    chips
-    clearable
-    label="categries"
-    multiple
-    prepend-icon="mdi-filter-variant"
-    solo
-  >
-    <template v-slot:selection="{ attrs, item, select, selected, index }">
-      <v-chip
-        v-bind="attrs"
-        :input-value="selected"
-        close
-        label
-        text-color="white"
-        :color="color[index]"
-        @click="select"
-        @click:close="remove(item)"
-      >
-      <v-icon left>
-        mdi-label
-      </v-icon>
-        <font>{{ item }}</font>&nbsp;
-      </v-chip>
-    </template>
-  </v-combobox>
+       <v-col cols="12" md="3">
+        <v-select
+          v-model="lastId"
+          :items="articleList"
+          item-text="ARTICLE_NAME"
+          item-value="ID"
+          label="上一篇"
+          solo
+        ></v-select>
+      </v-col>
+      <v-col cols="12" md="3">
+        <v-select
+          v-model="nextId"
+          :items="articleList"
+          item-text="ARTICLE_NAME"
+          item-value="ID"
+          label="下一篇"
+          solo
+        ></v-select>
+      </v-col>
+      <v-col cols="12" md="3">
+        <v-combobox
+          v-model="tags"
+          :items="categories"
+          chips
+          clearable
+          label="categries"
+          multiple
+          solo
+        >
+          <template v-slot:selection="{ attrs, item, select, selected, index }">
+            <v-chip
+              v-bind="attrs"
+              :input-value="selected"
+              close
+              label
+              text-color="white"
+              :color="color[index]"
+              @click="select"
+              @click:close="remove(item)"
+            >
+            <v-icon left>
+              mdi-label
+            </v-icon>
+              <font>{{ item }}</font>&nbsp;
+            </v-chip>
+          </template>
+        </v-combobox>
       </v-col>
     </v-row>
     <v-row justify="left">
@@ -87,7 +105,7 @@ code {
         <v-card class="mx-auto" max-width="256">
           <v-navigation-drawer permanent>
             <v-list-item>
-              <v-row>
+              <v-row class="my-1">
                 <v-col cols="12" md="6">
                   <v-btn
                     small
@@ -211,42 +229,61 @@ code {
         <v-card-text >
           <v-row>
             <v-col cols="12" md="3">
-        <v-text-field
-          v-model="params.ARTICLE_NAME"
-          label="文章名"
-          required
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" md="8">
-         <v-combobox
-    v-model="tags"
-    :items="categories"
-    chips
-    clearable
-    label="categries"
-    multiple
-    prepend-icon="mdi-filter-variant"
-    solo
-  >
-    <template v-slot:selection="{ attrs, item, select, selected, index }">
-      <v-chip
-        v-bind="attrs"
-        :input-value="selected"
-        close
-        label
-        text-color="white"
-        :color="color[index]"
-        @click="select"
-        @click:close="remove(item)"
-      >
-      <v-icon left>
-        mdi-label
-      </v-icon>
-        <font>{{ item }}</font>&nbsp;
-      </v-chip>
-    </template>
-  </v-combobox>
-      </v-col>
+              <v-text-field
+                v-model="params.ARTICLE_NAME"
+                label="文章名"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-combobox
+                v-model="tags"
+                :items="categories"
+                chips
+                clearable
+                label="categries"
+                multiple
+                solo
+              >
+                <template v-slot:selection="{ attrs, item, select, selected, index }">
+                  <v-chip
+                    v-bind="attrs"
+                    :input-value="selected"
+                    close
+                    label
+                    text-color="white"
+                    :color="color[index]"
+                    @click="select"
+                    @click:close="remove(item)"
+                  >
+                  <v-icon left>
+                    mdi-label
+                  </v-icon>
+                    <font>{{ item }}</font>&nbsp;
+                  </v-chip>
+                </template>
+              </v-combobox>
+            </v-col>
+             <v-col cols="12" md="3">
+              <v-select
+                v-model="lastId"
+                :items="articleList"
+                item-text="ARTICLE_NAME"
+                item-value="ID"
+                label="上一篇"
+                solo
+              ></v-select>
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-select
+                v-model="nextId"
+                :items="articleList"
+                item-text="ARTICLE_NAME"
+                item-value="ID"
+                label="下一篇"
+                solo
+              ></v-select>
+            </v-col>
           </v-row>
           <div id="editor" style="height:70vh">
             <textarea style="height:100%" :value="d_input" @input="d_update"></textarea>
@@ -280,6 +317,8 @@ export default {
     API_NEW_ARTICLE:"/api/article/write"
   },
   data: () => ({
+    lastId:'',
+    nextId:'',
     tags:[],
     categories:[],
     d_create:false,
@@ -331,7 +370,9 @@ export default {
         ID: id,
         NAME: name,
         CONTENT: this.input,
-        CATEGORY: this.detail.ARTICLE_CATEGORY
+        CATEGORY: this.detail.ARTICLE_CATEGORY,
+        last: this.lastId,
+        next: this.nextId
       };
 
       fsCfg.postData(
@@ -348,12 +389,14 @@ export default {
       );
     },
     create(){
-    let self = this;
+      let self = this;
       var data = {
         title: this.params.ARTICLE_NAME,
         content: this.d_input,
         user: 'cxk',
-        category: this.params.ARTICLE_CATEGORY
+        category: this.params.ARTICLE_CATEGORY,
+        last: this.lastId,
+        next: this.nextId
       };
 
       fsCfg.postData(
@@ -400,6 +443,8 @@ export default {
           self.input = self.detail.CONTENT;
           self.compiledMarkdown = marked(self.detail.CONTENT);
           self.tags = self.detail.ARTICLE_CATEGORY.split(';');
+          self.lastId = self.detail.LAST_ESSAY;
+          self.nextId = self.detail.NEXT_ESSAY;
         }
       });
     }

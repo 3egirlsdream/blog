@@ -26,6 +26,30 @@
                 v-html="detail.CONTENT_TRANSFERED"
               >
               </v-card-text>
+              <v-divider class="mt-5"></v-divider>
+              <v-card-text class="mt-10" v-show="detail.LAST_ESSAY != null || detail.NEXT_ESSAY != null">
+                  <div class="h2 font-weight-regular" style="font-size:1.4em;"><font color="#3f51b5">系列文章</font></div>
+              </v-card-text>
+              <v-card-actions>
+                <div class="d-inline-block text-truncate" v-show="detail.LAST_ESSAY != '' && detail.LAST_ESSAY != null" @click="gotopage(detail.LAST_ESSAY)">
+                  <v-btn v-show="detail.LAST_ESSAY != '' && detail.LAST_ESSAY != null" class="mx-2" fab dark x-small color="indigo">
+                    <v-icon dark>
+                      mdi-arrow-left
+                    </v-icon>
+                  </v-btn><a>{{detail.LAST_ESSAY_NAME}}</a>
+                </div>
+                <div class="d-inline-block text-truncate" v-show="detail.NEXT_ESSAY != null" @click="gotopage(detail.NEXT_ESSAY)">
+                  <a class="ml-10">{{detail.NEXT_ESSAY_NAME}}</a>
+                  <v-btn v-show="detail.NEXT_ESSAY != null" class="mx-2 " fab dark x-small color="indigo">
+                    <v-icon dark>
+                      mdi-arrow-right
+                    </v-icon>
+                  </v-btn>
+                </div>
+              </v-card-actions>
+              <v-card-text>
+                <!-- 版权声明 -->
+              </v-card-text>
             </v-container>
           </v-form>
         </material-card>
@@ -50,6 +74,7 @@
 
 
           </v-card-text>
+
         </app-card>
       </v-col>
     </v-row>
