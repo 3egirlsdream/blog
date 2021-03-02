@@ -5,6 +5,7 @@ import vuetify from './plugins/vuetify'
 import './plugins'
 import store from './store'
 import { sync } from 'vuex-router-sync'
+import '../src/assets/css/style.css'
 
 Vue.config.productionTip = false
 
