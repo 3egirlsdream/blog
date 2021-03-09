@@ -117,7 +117,7 @@ export default {
       });
     },
     toDetail(item) {
-      this.$router.push({ path: '/components/profile/',query:{id:item.ID}})
+      this.$router.push({ path: '/components/contents/',query:{id:item.ID}})
 
     },
   },

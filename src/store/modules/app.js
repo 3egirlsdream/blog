@@ -16,7 +16,7 @@ const state = {
     {
       title: '分类',
       icon: 'mdi-arrange-bring-forward',
-      to: '/components/typography/',
+      to: '/components/categries',
     },
     // {
     //   title: 'Dashboard',

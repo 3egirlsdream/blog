@@ -38,9 +38,9 @@
                     </v-icon>
                   </v-btn><a>{{detail.LAST_ESSAY_NAME}}</a>
                 </div>
-                <div class="d-inline-block text-truncate" v-show="detail.NEXT_ESSAY != null" @click="gotopage(detail.NEXT_ESSAY)">
+                <div class="d-inline-block text-truncate" v-show="detail.NEXT_ESSAY != '' && detail.NEXT_ESSAY != null" @click="gotopage(detail.NEXT_ESSAY)">
                   <a class="ml-10">{{detail.NEXT_ESSAY_NAME}}</a>
-                  <v-btn v-show="detail.NEXT_ESSAY != null" class="mx-2 " fab dark x-small color="indigo">
+                  <v-btn v-show="detail.NEXT_ESSAY != '' && detail.NEXT_ESSAY != null" class="mx-2 " fab dark x-small color="indigo">
                     <v-icon dark>
                       mdi-arrow-right
                     </v-icon>
@@ -149,7 +149,7 @@ export default {
       });
     },
     gotopage(id) {
-      this.$router.push({path:'/components/profile/', query:{id:id}})
+      this.$router.push({path:'/components/contents/', query:{id:id}})
       location.reload();
     }
   }

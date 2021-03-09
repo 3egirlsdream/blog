@@ -127,7 +127,7 @@ export default {
       });
     },
     toDetail(ID) {
-      this.$router.push({ path: "/components/profile/", query: { id: ID } });
+      this.$router.push({ path: "/components/contents/", query: { id: ID } });
     },
     getArticleToPage(category) {
       let self = this;

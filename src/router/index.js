@@ -23,15 +23,15 @@ const router = new Router({
       route('Dashboard', null, 'tables/dashboard'),
 
       // Pages
-      route('UserProfile', null, 'components/profile'),
+      route('Contents', null, 'components/contents'),
 
       // Components
       route('Notifications', null, 'components/notifications'),
       route('Icons', null, 'components/icons'),
-      route('Typography', null, 'components/typography'),
+      route('Categries', null, 'components/categries'),
 
-      // Tables
-      route('Regular Tables'),
+      // Index Page
+      route('HomePage'),
 
       // Maps
       route('Markdown', null, 'markdown'),
