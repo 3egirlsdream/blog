@@ -1,73 +1,61 @@
 <template>
-  <v-container id="typography-view" fluid tag="section">
-    <v-row justify="center">
-      <v-col cols="12" md="8">
-        <v-card
-          elevation="2"
-          class="my-5"
-          v-for="item in articleList"
-          :key="item"
-          icon-small
-          :title="item.ARTICLE_NAME"
-          color="accent"
-        >
-          <v-simple-table>
-            <v-card-title> </v-card-title>
-            <v-card-text>
-              <div class="caption">{{ item.DATETIME_CREATED }}</div>
-              <br />
-              <a class="h2" style="font-size:1.5em" @click="toDetail(item.ID)"
-                ><font color="#3f51b5">{{ item.ARTICLE_NAME }}</font></a
-              >
-
-              <!-- <div class="h1">{{ item.CONTENT }}</div> -->
-            </v-card-text>
-            <v-card-text>
-              <v-divider></v-divider>
-              <v-chip
-                v-for="(tags, index) in item.categories"
-                :key="tags"
-                class="ma-1"
-                :color="color[index]"
-                label
-                text-color="white"
-              >
-                {{ tags }}
-              </v-chip>
-            </v-card-text>
-          </v-simple-table>
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="4">
-        <template>
-          <v-card class="pa-12 my-5" color="indigo darken-2" flat>
-            <v-card elevation="12" width="256">
-              <v-navigation-drawer floating permanent>
-                <v-list dense rounded>
-                  <v-list-item
-                    v-for="item in categories"
-                    :key="item.title"
-                    link
-                  >
-                    <v-list-item-icon>
-                      <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
-
+  <v-app>
+    <v-container>
+      <v-row justify="center">
+        <v-col cols="12" md="8">
+          <template v-for="(item, index) in articleList">
+            <v-col
+              :key="index"
+              cols="12"
+              md="12"
+            >
+              <v-sheet elevation="1" height="50" style="overflow:hidden;">
+                <v-list-item two-line>
                     <v-list-item-content>
-                      <v-list-item-title
-                        @click="getArticleToPage(item.title)"
-                        >{{ item.title }}</v-list-item-title
-                      >
+                      <v-list-item-title class="headline">
+                        <a @click="toDetail(item.ID)">
+                          <font color="#3f51b5">{{ item.ARTICLE_NAME }}</font>
+                        </a>
+
+                      </v-list-item-title>
+                      <v-list-item-subtitle>{{
+                        item.DATETIME_CREATED
+                      }}</v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
-                </v-list>
-              </v-navigation-drawer>
-            </v-card>
-          </v-card>
-        </template>
-      </v-col>
-    </v-row>
-  </v-container>
+              </v-sheet>
+            </v-col>
+          </template>
+        </v-col>
+        <v-col cols="12" md="4">
+          <template>
+              <v-sheet elevation="1" width="256" class="mt-3">
+                <v-navigation-drawer floating permanent>
+                  <v-list dense rounded>
+                    <v-list-item
+                      v-for="item in categories"
+                      :key="item.title"
+                      link
+                      @click="getArticleToPage(item.title)"
+                    >
+                      <v-list-item-icon>
+                        <v-icon>{{ item.icon }}</v-icon>
+                      </v-list-item-icon>
+
+                      <v-list-item-content>
+                        <v-list-item-title
+                          >{{ item.title }}</v-list-item-title
+                        >
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-navigation-drawer>
+              </v-sheet>
+          </template>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
@@ -102,7 +90,7 @@ export default {
       fsCfg.getData(url, function(res) {
         if (res.success) {
           self.articleList = res.data;
-          self.categories = [{ title: "全部", icon: "mdi-forum" }];
+          self.categories = [{ title: "全部", icon: "mdi-file" }];
           let temp = [];
           for (let index = 0; index < res.data.length; index++) {
             const element = res.data[index];
@@ -114,7 +102,7 @@ export default {
             });
           }
           temp.forEach(c => {
-            var m = { title: c, icon: "mdi-forum" };
+            var m = { title: c, icon: "mdi-file" };
             self.categories.push(m);
           });
 

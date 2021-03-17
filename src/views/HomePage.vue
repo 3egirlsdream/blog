@@ -23,36 +23,51 @@
     <view-intro heading="主页" link="components/simple-tables" />
     <div class="py-3" />
 
-    <material-card
-      v-for="item in articleList"
-      :key="item"
-      icon="mdi-clipboard-plus"
+    <v-card
+      v-for="(item, index) in articleList"
+      :key="index"
       icon-small
-      :title="item.ARTICLE_NAME"
-      color="accent"
+      class="my-2"
+      style="overflow:hidden;"
     >
-      <v-simple-table>
-        <v-card-title class="text--secondary">{{ item.DATETIME_CREATED }}</v-card-title>
-        <v-card-text>{{item.INDEX_CONTENT}}
-              <a @click="toDetail(item)" class="post-more waves-effect waves-button">阅读全文…</a>
-        </v-card-text>
-        <v-card-text>
-          <v-divider></v-divider>
-          <v-chip
-            v-for="(tags, index) in item.categories"
-            :key="tags"
-            class="ma-1"
-            :color="color[index]"
-            label
-            text-color="white"
-          >
-            {{tags}}
-          </v-chip>
-          </v-card-text>
-
-
-      </v-simple-table>
-    </material-card>
+      <v-card-title>
+        <v-list-item>
+          <v-list-item-avatar>
+            <v-icon large left>
+              mdi-bookshelf
+            </v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content >
+            <v-list-item-title class="headline">
+              {{ item.ARTICLE_NAME }}
+            </v-list-item-title>
+            <v-list-item-subtitle><span style="font-weight:300">{{
+              item.DATETIME_CREATED
+            }}</span></v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-card-title>
+      <v-card-text
+        >{{ item.INDEX_CONTENT }}
+        <a @click="toDetail(item)" class="post-more waves-effect waves-button"
+          >阅读全文…</a
+        >
+      </v-card-text>
+      <v-divider class="mx-2"></v-divider>
+      <v-card-actions>
+        <v-chip
+          left
+          v-for="(tags, index) in item.categories"
+          :key="`${tags} ${index}`"
+          class="ma-1"
+          :color="color[index]"
+          label
+          text-color="white"
+        >
+          {{ tags }}
+        </v-chip>
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
 
@@ -70,9 +85,19 @@ export default {
   },
   data() {
     return {
-      detail:[],
+      detail: [],
       articleList: [],
-      color:["#8bc34a", "#673ab7", "#ff9800", "#f44336", "#E09F7D", "#EF5D60", "#EC4067", "#311847", "#163438"]
+      color: [
+        "#8bc34a",
+        "#673ab7",
+        "#ff9800",
+        "#f44336",
+        "#E09F7D",
+        "#EF5D60",
+        "#EC4067",
+        "#311847",
+        "#163438"
+      ]
     };
   },
   methods: {
@@ -117,9 +142,11 @@ export default {
       });
     },
     toDetail(item) {
-      this.$router.push({ path: '/components/contents/',query:{id:item.ID}})
-
-    },
+      this.$router.push({
+        path: "/components/contents/",
+        query: { id: item.ID }
+      });
+    }
   },
   mounted: function() {
     this.getAllArticle();
