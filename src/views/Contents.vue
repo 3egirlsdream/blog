@@ -99,7 +99,7 @@
               <h5 class="text-h5 mb-2 text--secondary text-center">
                 目录
               </h5>
-              <a
+              <a class="contents"
                 style="text-decoration:none;"
                 :href="'#' + node.id"
                 v-for="(node, index) in nodes"
@@ -284,5 +284,9 @@ export default {
 .mobile{
   position:fixed;
   top:93px;
+}
+
+a.contents :hover{
+  font-weight: 500;
 }
 </style>
