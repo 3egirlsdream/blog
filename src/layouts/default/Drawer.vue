@@ -70,7 +70,7 @@
     name: 'DefaultDrawer',
     data(){
       return {
-        img:"https://cdn.wallpaperhub.app/cloudcache/c/e/3/6/2/4/ce3624266c5a226ab8d18e6245f66eabd215c2aa.jpg"
+        img:"https://rmt.dogedoge.com/fetch/fluid/storage/bg/vdysjx.png?w=1920&fmt=webp"
         // items:["a", "b"]
       }
     },
