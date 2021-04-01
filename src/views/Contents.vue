@@ -99,17 +99,17 @@
               <h5 class="text-h5 mb-2 text--secondary text-center">
                 目录
               </h5>
-              <a class="contents"
+              <a class="contents text--secondary text-left"
                 style="text-decoration:none;"
                 :href="'#' + node.id"
                 v-for="(node, index) in nodes"
                 :key="index"
-                ><font color="black"
+                ><font
                   ><span
                     style="margin-left:15px"
                     v-for="j in node.index"
                     :key="j"
-                    ><font color="#fff" v-html="whitespace">{{
+                    ><font class="white" v-html="whitespace">{{
                       whitespace
                     }}</font></span
                   >○ {{ node.id }}<br /></font
