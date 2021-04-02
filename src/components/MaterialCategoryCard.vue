@@ -12,7 +12,7 @@
             width="130"
             contain
             class="ma-4"
-            src="https://www.cxyxiaowu.com/wp-content/uploads/avatar/avatar-1.png"
+            :src="item.url"
           ></v-img>
         </v-col>
         <v-col cols="8" class="pa-2">
@@ -20,14 +20,14 @@
             <v-list-item-content>
               <v-list-item-title class="headline">
                 <a @click="toDetail(item.ID)">
-                  <font color="#3f51b5">{{ item.ARTICLE_NAME }}</font>
+                  <font color="#3f51b5" style="font-weight:700">{{ item.ARTICLE_NAME }}</font>
                 </a>
               </v-list-item-title>
               <v-list-item-subtitle>{{
                 item.DATETIME_CREATED
               }}</v-list-item-subtitle>
               <v-list-item-content style="overlow:hidden; font-weight:300"><font color="grey">
-                {{item.CONTENT.substring(0,50)}}</font><a style="display:inline">阅读全文...</a>
+                {{item.CONTENT.substring(0,50)}}</font>
               </v-list-item-content>
             </v-list-item-content>
           </v-list-item>
@@ -40,6 +40,11 @@
 export default {
   name: "MaterialCategoryCard",
 
-  props: { item: Object }
+  props: { item: Object },
+  methods:{
+    toDetail(){
+      this.$emit('toDetail');
+    }
+  }
 };
 </script>

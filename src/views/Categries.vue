@@ -7,6 +7,7 @@
             <template v-for="(item, index) in articleList">
               <v-col :key="index">
                 <MaterialCategoryCard
+                  @toDetail="toDetail(item.ID)"
                   :item="item"
                   justify="space-around"
                 ></MaterialCategoryCard>
@@ -18,11 +19,13 @@
               ></v-responsive>
             </template>
             <template >
-              <v-row justify="center" class="mt-4">
+              <v-row justify="center" class="mt-4" style="width:100%" >
                 <v-pagination
                   v-model="curPage"
-                  :length="10"
+                  :length="parseInt(totalCount % Length == 0 ? totalCount / Length : (totalCount / Length) + 1)"
                   :total-visible="7"
+                  @next="next()"
+                  @previous="previous()"
                 ></v-pagination>
               </v-row>
             </template>
@@ -30,14 +33,14 @@
         </v-col>
         <v-col cols="12" md="4">
           <template>
-            <v-sheet elevation="1" width="256" class="mt-3">
+            <v-sheet elevation="1" width="256" class="mt-5">
               <v-navigation-drawer floating permanent>
                 <v-list dense rounded>
                   <v-list-item
                     v-for="item in categories"
                     :key="item.title"
                     link
-                    @click="getArticleToPage(item.title)"
+                    @click="getArticleToPage(item.title), selected = item.title"
                   >
                     <v-list-item-icon>
                       <v-icon>{{ item.icon }}</v-icon>
@@ -67,7 +70,8 @@ export default {
     API_GET_ALL_ARTICLE: "/api/article/user={0}&category={1}",
     API_GET_CONTENT: "/api/article/id={0}",
     API_GET_ALL_ARTICLE_TO_PAGE:
-      "/api/article/page/user={0}&category={1}&startIndex={2}&length={3}"
+      "/api/article/page/user={0}&category={1}&startIndex={2}&length={3}",
+    API_GET_CATEGORIES:'/api/article/getarticlecategory'
   },
   components: {
     MaterialCategoryCard: () => import("../components/MaterialCategoryCard")
@@ -77,7 +81,11 @@ export default {
       { title: "Home", icon: "mdi-view-dashboard" },
       { title: "About", icon: "mdi-forum" }
     ],
+    defaultPic:'https://www.cxyxiaowu.com/wp-content/uploads/avatar/avatar-1.png',
+    selected:"全部",
     curPage:1,
+    Length:10,
+    totalCount:1,
     articleList: [],
     categories: [],
     color: [
@@ -92,40 +100,32 @@ export default {
       "#163438"
     ]
   }),
+  watch:{
+    curPage(val){
+      this.getArticleToPage(this.selected);
+    }
+  },
   methods: {
-    getAllArticle() {
+    next(){
+      let total = this.totalCount % this.Length == 0 ? this.totalCount / this.Length : (this.totalCount / this.Length) + 1;
+      this.curPage = this.curPage < total ? this.curPage + 1 : 1;
+    },
+    previous(){
+      this.curPage = this.curPage == 0 ? 1 : this.curPage - 1;
+    },
+    getCategories(){
       let self = this;
-      var url = framework.strFormat(
-        this.$options.serverUrl.API_GET_ALL_ARTICLE,
-        "cxk",
-        "全部"
-      );
-      fsCfg.getData(url, function(res) {
-        if (res.success) {
-          self.articleList = res.data;
+      let url = this.$options.serverUrl.API_GET_CATEGORIES;
+      fsCfg.getData(url, function(res){
+        if(res.success){
           self.categories = [{ title: "全部", icon: "mdi-file" }];
-          let temp = [];
           for (let index = 0; index < res.data.length; index++) {
             const element = res.data[index];
-            element.categories = [];
-            var ca = element.ARTICLE_CATEGORY.split(";");
-            ca.forEach(x => {
-              if (!temp.includes(x)) temp.push(x);
-              element.categories.push(x);
-            });
-          }
-          temp.forEach(c => {
-            var m = { title: c, icon: "mdi-file" };
+            var m = { title: element, icon: "mdi-file" };
             self.categories.push(m);
-          });
-
-          for (let i = 0; i < self.articleList.length; i++) {
-            self.articleList[i].DATETIME_CREATED = self.articleList[
-              i
-            ].DATETIME_CREATED.replace("T", " ");
           }
         }
-      });
+      })
     },
     toDetail(ID) {
       this.$router.push({ path: "/components/contents/", query: { id: ID } });
@@ -136,32 +136,51 @@ export default {
         this.$options.serverUrl.API_GET_ALL_ARTICLE_TO_PAGE,
         "cxk",
         encodeURIComponent(category),
-        0,
-        99999
+        this.curPage,
+        this.Length
       );
       fsCfg.getData(url, function(res) {
         if (res.success) {
-          self.articleList = res.data;
+          self.articleList = res.data.data;
+          self.totalCount = res.data.totalCount;
           for (let i = 0; i < self.articleList.length; i++) {
-            if (self.articleList[i].IMG_CODE != null)
-              self.articleList[i].DATETIME_CREATED = self.articleList[
-                i
-              ].DATETIME_CREATED.replace("T", " ");
-            var ca = self.articleList[i].ARTICLE_CATEGORY.split(";");
-            self.articleList[i].categories = [];
+            let e = self.articleList[i]
+            if (e.IMG_CODE != null) e.DATETIME_CREATED = e.DATETIME_CREATED.replace("T", " ");
+            var ca = e.ARTICLE_CATEGORY.split(";");
+            e.categories = [];
             ca.forEach(x => {
-              self.articleList[i].categories.push(x);
+              e.categories.push(x);
             });
+
+            let regex = /(http[s]?:\/\/([\w-]+.)+(:\d{1,5})?(\/[\w-\.\/\?%&=]*)?)/gi
+            let urls = e.CONTENT.match(regex)
+            let url = "";
+            if(urls != undefined && urls != null && urls.length > 0){
+              for (let i = 0; i < urls.length; i++) {
+                const c = urls[i];
+                if(c == null || c == undefined)
+                  continue;
+                if(c.includes("png") || c.includes('jpg')){
+                  url = c;
+                  url = url.replace(')', '')
+                  break;
+                }
+              }
+            }
+
+            console.log(url);
+            e.url = (url == undefined || url == null || url == '') ? self.defaultPic : url;
           }
         }
       });
     },
-    selected: function(item) {
-      this.getArticleToPage();
-    }
+    // selected: function(item) {
+    //   //this.getArticleToPage();
+    // }
   },
   mounted: function() {
-    this.getAllArticle();
+    this.getCategories();
+    this.getArticleToPage("全部");
   }
 };
 </script>

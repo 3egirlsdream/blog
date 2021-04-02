@@ -3,8 +3,8 @@
   typeof exports === 'object' && typeof module !== 'undefined' ?
     factory(exports) :
     typeof define === 'function' && define.amd ?
-    define('framework', ['exports'], factory) :
-    factory((global.framework = {}))
+      define('framework', ['exports'], factory) :
+      factory((global.framework = {}))
 })(this, function (exports) {
   'use strict'
   /*exports.getData = function (url) {
@@ -100,11 +100,31 @@
   }
 
   //
-  exports.isNullOrWhite = function(str){
-    if(str == null) return false;
-    if(str == "") return false;
+  exports.isNullOrWhite = function (str) {
+    if (str == null) return false;
+    if (str == "") return false;
     return true;
   }
+
+  exports.isPC = function () {
+    var userAgentInfo = window.navigator.userAgent;
+    var Agents = [
+      "Android",
+      "iPhone",
+      "SymbianOS",
+      "Windows Phone",
+      "iPad",
+      "iPod"
+    ];
+
+    for (var i = 0; i < Agents.length; i++) {
+      if (userAgentInfo.indexOf(Agents[i]) > 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   window.framework = exports
 })
 
