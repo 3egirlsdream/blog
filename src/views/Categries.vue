@@ -81,7 +81,7 @@ export default {
       { title: "Home", icon: "mdi-view-dashboard" },
       { title: "About", icon: "mdi-forum" }
     ],
-    defaultPic:'https://www.cxyxiaowu.com/wp-content/uploads/avatar/avatar-1.png',
+    defaultPic:'https://gitee.com/eeegirlsdream/picture/raw/master/article/IMG20210414-163809334.jpg',
     selected:"全部",
     curPage:1,
     Length:10,
@@ -168,7 +168,6 @@ export default {
               }
             }
 
-            console.log(url);
             e.url = (url == undefined || url == null || url == '') ? self.defaultPic : url;
           }
         }

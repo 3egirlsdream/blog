@@ -97,7 +97,7 @@
 
             <v-card-text class="text-left">
               <h5 class="text-h5 mb-2 text--secondary text-center">
-                目录
+                本文内容
               </h5>
               <a class="contents text--secondary text-left"
                 style="text-decoration:none;"

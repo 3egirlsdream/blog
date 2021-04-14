@@ -8,14 +8,14 @@
       <v-row>
         <v-col cols="4">
           <v-img
-            height="130"
-            width="130"
+            height="115"
+            width="115"
             contain
-            class="ma-4"
+            class="ma-4 mr-2"
             :src="item.url"
           ></v-img>
         </v-col>
-        <v-col cols="8" class="pa-2">
+        <v-col cols="8" class="pt-4 pl-0 pr-2 pb-2">
           <v-list-item two-line>
             <v-list-item-content>
               <v-list-item-title class="headline">
