@@ -23,13 +23,7 @@
     <view-intro heading="主页" link="components/simple-tables" />
     <div class="py-3" />
 
-    <v-card
-      v-for="(item, index) in articleList"
-      :key="index"
-      icon-small
-      class="my-2"
-      style="overflow:hidden;"
-    >
+    <v-card v-for="(item, index) in articleList" :key="index" icon-small class="my-2" style="overflow:hidden;">
       <v-card-title>
         <v-list-item>
           <v-list-item-avatar>
@@ -41,50 +35,25 @@
             <v-list-item-title class="headline" style="font-weight:500">
               {{ item.ARTICLE_NAME }}
             </v-list-item-title>
-            <v-list-item-subtitle
-              ><span style="font-weight:300">{{
+            <v-list-item-subtitle><span style="font-weight:300">{{
                 item.DATETIME_CREATED
-              }}</span></v-list-item-subtitle
-            >
+              }}</span></v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-card-title>
-      <v-card-text
-        >{{ item.INDEX_CONTENT.substring(0, contentSize) }}
-        <a @click="toDetail(item)" class="post-more waves-effect waves-button"
-          >阅读全文…</a
-        >
+      <v-card-text>{{ item.INDEX_CONTENT.substring(0, contentSize) }}
+        <a @click="toDetail(item)" class="post-more waves-effect waves-button">阅读全文…</a>
       </v-card-text>
       <v-divider class="mx-2"></v-divider>
       <v-card-actions>
-        <v-chip
-          left
-          v-for="(tags, index) in item.categories"
-          :key="`${tags} ${index}`"
-          class="ma-1"
-          :color="color[index]"
-          label
-          text-color="white"
-        >
+        <v-chip left v-for="(tags, index) in item.categories" :key="`${tags} ${index}`" class="ma-1" :color="color[index]" label text-color="white">
           {{ tags }}
         </v-chip>
       </v-card-actions>
     </v-card>
     <template>
       <v-row justify="center" class="mt-5" style="width:100%">
-        <v-pagination
-          v-model="curPage"
-          :length="
-            parseInt(
-              totalCount % pageSize == 0
-                ? totalCount / pageSize
-                : totalCount / pageSize + 1
-            )
-          "
-          :total-visible="7"
-          @next="next()"
-          @previous="previous()"
-        ></v-pagination>
+        <v-pagination v-model="curPage" :length="parseInt(totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1)" :total-visible="7" @next="next()" @previous="previous()"></v-pagination>
       </v-row>
     </template>
   </v-container>
@@ -100,7 +69,7 @@ export default {
     API_GET_ALL_ARTICLE: "/api/article/user={0}&category={1}",
     API_GET_CONTENT: "/api/article/id={0}",
     API_GET_ALL_ARTICLE_TO_PAGE:
-      "/api/article/page/user={0}&category={1}&startIndex={2}&length={3}"
+      "/api/article/page/user={0}&category={1}&startIndex={2}&length={3}",
   },
   data() {
     return {
@@ -119,14 +88,14 @@ export default {
         "#EF5D60",
         "#EC4067",
         "#311847",
-        "#163438"
-      ]
+        "#163438",
+      ],
     };
   },
   watch: {
     curPage(val) {
       this.getAllArticle();
-    }
+    },
   },
   methods: {
     next() {
@@ -148,7 +117,7 @@ export default {
         this.curPage,
         this.pageSize
       );
-      fsCfg.getData(url, function(res) {
+      fsCfg.getData(url, function (res) {
         if (res.success) {
           self.articleList = res.data.data;
           self.totalCount = res.data.totalCount;
@@ -159,12 +128,12 @@ export default {
             element.categories = [];
             console.log(element.ARTICLE_CATEGORY);
             var ca = element.ARTICLE_CATEGORY.split(";");
-            ca.forEach(x => {
+            ca.forEach((x) => {
               if (!temp.includes(x)) temp.push(x);
               element.categories.push(x);
             });
           }
-          temp.forEach(c => {
+          temp.forEach((c) => {
             var m = { name: c, checked: false };
             self.categories.push(m);
           });
@@ -181,15 +150,15 @@ export default {
     toDetail(item) {
       this.$router.push({
         path: "/components/contents/",
-        query: { id: item.ID }
+        query: { id: item.ID },
       });
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     let self = this;
     this.getAllArticle();
     self.contentSize = framework.isPC() ? 200 : 80;
-    window.onresize = function() {
+    window.onresize = function () {
       let f = framework.isPC();
       if (f) {
         self.contentSize = 200;
@@ -197,6 +166,6 @@ export default {
         self.contentSize = 80;
       }
     };
-  }
+  },
 };
 </script>

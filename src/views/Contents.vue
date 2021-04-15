@@ -8,74 +8,41 @@
           </template>
           <v-divider></v-divider>
           <v-card-title>
-            <v-chip
-              v-for="(tags, index) in detail.categories"
-              :key="index"
-              class="ma-1"
-              :color="color[index]"
-              label
-              text-color="white"
-            >
+            <v-chip v-for="(tags, index) in detail.categories" :key="index" class="ma-1" :color="color[index]" label text-color="white">
               {{ tags }}
             </v-chip>
           </v-card-title>
           <v-form>
             <v-container class="py-0">
-              <v-card-text
-                class="markdown-body"
-                v-html="detail.CONTENT_TRANSFERED"
-              >
+              <v-card-text class="markdown-body" v-html="detail.CONTENT_TRANSFERED">
               </v-card-text>
               <v-divider class="mt-5"></v-divider>
-              <v-card-text
-                class="mt-10"
-                v-show="detail.LAST_ESSAY != null || detail.NEXT_ESSAY != null"
-              >
-                <div class="h2 font-weight-regular" style="font-size:1.4em;">
+              <v-card-text class="mt-10" v-show="detail.LAST_ESSAY != null || detail.NEXT_ESSAY != null">
+                <div class="h2 font-weight-regular" style="font-size: 1.4em">
                   <font color="#3f51b5">系列文章</font>
                 </div>
               </v-card-text>
               <v-card-actions>
-                <div
-                  class="d-inline-block text-truncate"
-                  v-show="detail.LAST_ESSAY != '' && detail.LAST_ESSAY != null"
-                  @click="gotopage(detail.LAST_ESSAY)"
-                >
-                  <v-btn
-                    v-show="
-                      detail.LAST_ESSAY != '' && detail.LAST_ESSAY != null
-                    "
-                    class="mx-2"
-                    fab
-                    dark
-                    x-small
-                    color="indigo"
-                  >
-                    <v-icon dark>
-                      mdi-arrow-left
-                    </v-icon> </v-btn
-                  ><a>{{ detail.LAST_ESSAY_NAME }}</a>
-                </div>
-                <div
-                  class="d-inline-block text-truncate"
-                  v-show="detail.NEXT_ESSAY != '' && detail.NEXT_ESSAY != null"
-                  @click="gotopage(detail.NEXT_ESSAY)"
-                >
-                  <a class="ml-10">{{ detail.NEXT_ESSAY_NAME }}</a>
-                  <v-btn
-                    v-show="
-                      detail.NEXT_ESSAY != '' && detail.NEXT_ESSAY != null
-                    "
-                    class="mx-2 "
-                    fab
-                    dark
-                    x-small
-                    color="indigo"
-                  >
-                    <v-icon dark>
-                      mdi-arrow-right
-                    </v-icon>
-                  </v-btn>
+                <div>
+                  <v-row v-show="detail.LAST_ESSAY != '' && detail.LAST_ESSAY != null" @click="gotopage(detail.LAST_ESSAY)">
+                    <v-btn v-show="detail.LAST_ESSAY != '' && detail.LAST_ESSAY != null" class="mx-2" fab dark x-small color="indigo">
+                      <v-icon dark> mdi-arrow-left </v-icon>
+                    </v-btn>
+                    <a style="line-height:32px;font-weight:300">
+                      <font color="grey">上一篇：</font>
+                      <font color="#5590f0">{{ detail.LAST_ESSAY_NAME }}</font>
+                    </a>
+                  </v-row>
+
+                  <v-row class="mt-4" v-show="detail.NEXT_ESSAY != '' && detail.NEXT_ESSAY != null" @click="gotopage(detail.NEXT_ESSAY)">
+                    <v-btn v-show="detail.NEXT_ESSAY != '' && detail.NEXT_ESSAY != null" class="mx-2" fab dark x-small color="indigo">
+                      <v-icon> mdi-arrow-right </v-icon>
+                    </v-btn>
+                    <a style="line-height:32px;font-weight:300">
+                      <font color="grey">下一篇：</font>
+                      <font color="#5590f0">{{ detail.NEXT_ESSAY_NAME }}</font>
+                    </a>
+                  </v-row>
                 </div>
               </v-card-actions>
               <v-card-text>
@@ -96,37 +63,20 @@
             /> -->
 
             <v-card-text class="text-left">
-              <h5 class="text-h5 mb-2 text--secondary text-center">
-                本文内容
-              </h5>
-              <a class="contents text--secondary text-left"
-                style="text-decoration:none;"
-                :href="'#' + node.id"
-                v-for="(node, index) in nodes"
-                :key="index"
-                ><font
-                  ><span
-                    style="margin-left:15px"
-                    v-for="j in node.index"
-                    :key="j"
-                    ><font class="white" v-html="whitespace">{{
+              <h5 class="text-h5 mb-2 text--secondary text-center">本文内容</h5>
+              <a class="contents text--secondary text-left" style="text-decoration: none" :href="'#' + node.id" v-for="(node, index) in nodes" :key="index">
+                <font><span style="margin-left: 15px" v-for="j in node.index" :key="j">
+                    <font class="white" v-html="whitespace">{{
                       whitespace
-                    }}</font></span
-                  >○ {{ node.id }}<br /></font
-              ></a>
+                    }}</font>
+                  </span>○ {{ node.id }}<br /></font>
+              </a>
             </v-card-text>
           </app-card>
           <app-card class="mt-4 text-center">
             <v-card-text class="text-left">
-              <h5 class="text-h5 mb-2 text--secondary text-center">
-                相关文章
-              </h5>
-              <a
-                v-for="(title, index) in articles"
-                :key="index"
-                @click="gotopage(title.id)"
-                class="text--secondary text-left"
-                >{{ title.title }}<br />
+              <h5 class="text-h5 mb-2 text--secondary text-center">相关文章</h5>
+              <a v-for="(title, index) in articles" :key="index" @click="gotopage(title.id)" class="text--secondary text-left">{{ title.title }}<br />
               </a>
             </v-card-text>
           </app-card>
@@ -137,8 +87,6 @@
 </template>
 
 <script>
-
-
 import framework from "../assets/js/framework.js";
 import fsCfg from "../assets/js/fw.js";
 import marked from "marked";
@@ -148,7 +96,7 @@ export default {
     API_GET_ALL_ARTICLE: "/api/article/user={0}&category={1}",
     API_GET_CONTENT: "/api/article/id={0}",
     API_GET_ALL_ARTICLE_TO_PAGE:
-      "/api/article/page/user={0}&category={1}&startIndex={2}&length={3}"
+      "/api/article/page/user={0}&category={1}&startIndex={2}&length={3}",
   },
   data() {
     return {
@@ -162,16 +110,16 @@ export default {
         "#EF5D60",
         "#EC4067",
         "#311847",
-        "#163438"
+        "#163438",
       ],
       detail: [],
       id: this.$route.query.id,
       nodes: [],
       whitespace: " ",
-      flag:true,
+      flag: true,
     };
   },
-  mounted: function() {
+  mounted: function () {
     let self = this;
     this.loadData();
     this.isPC();
@@ -182,10 +130,9 @@ export default {
       "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.css";
     document.head.appendChild(link);
     this.getAllArticle();
-    window.onresize = function (){
+    window.onresize = function () {
       self.isPC();
-    }
-
+    };
   },
   methods: {
     match(whatSay) {
@@ -194,6 +141,7 @@ export default {
       //whatSay = whatSay.replaceAll('>',">\n");
       var node = whatSay.match(maxs);
       this.nodes = [];
+      if(node == undefined) return;
       let min = 10000;
       for (let i = 0; i < node.length; i++) {
         let x = node[i];
@@ -210,11 +158,11 @@ export default {
 
         this.nodes.push({
           index: index,
-          id: x
+          id: x,
         });
       }
 
-      this.nodes.forEach(c => {
+      this.nodes.forEach((c) => {
         c.index -= min;
       });
     },
@@ -224,7 +172,7 @@ export default {
         this.$options.serverUrl.API_GET_CONTENT,
         self.id
       );
-      fsCfg.getData(url, function(res) {
+      fsCfg.getData(url, function (res) {
         if (res.success) {
           self.detail = res.data;
           self.detail.DATETIME_CREATED = self.detail.DATETIME_CREATED.replace(
@@ -244,17 +192,25 @@ export default {
         "cxk",
         "全部"
       );
-      fsCfg.getData(url, function(res) {
+      fsCfg.getData(url, function (res) {
         if (res.success) {
           for (let index = 0; index < res.data.length; index++) {
             const element = res.data[index];
-            self.articles.push({ id: element.ID, title: element.ARTICLE_NAME });
+            self.articles.push({
+              id: element.ID,
+              title: element.ARTICLE_NAME,
+            });
           }
         }
       });
     },
     gotopage(id) {
-      this.$router.push({ path: "/components/contents/", query: { id: id } });
+      this.$router.push({
+        path: "/components/contents/",
+        query: {
+          id: id,
+        },
+      });
       location.reload();
     },
     isPC() {
@@ -266,7 +222,7 @@ export default {
         "SymbianOS",
         "Windows Phone",
         "iPad",
-        "iPod"
+        "iPod",
       ];
 
       for (var i = 0; i < Agents.length; i++) {
@@ -275,18 +231,18 @@ export default {
           break;
         }
       }
-
-    }
-  }
+    },
+  },
 };
 </script>
+
 <style scoped>
-.mobile{
-  position:fixed;
-  top:93px;
+.mobile {
+  position: fixed;
+  top: 93px;
 }
 
-a.contents :hover{
+a.contents :hover {
   font-weight: 500;
 }
 </style>
