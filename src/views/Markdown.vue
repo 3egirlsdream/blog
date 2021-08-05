@@ -159,7 +159,7 @@ code {
         <v-card-text>
           <v-row>
             <v-col cols="12" md="3">
-              <v-text-field v-model="params.ARTICLE_NAME" label="文章名" required></v-text-field>
+              <v-text-field v-model="params.ARTICLE_NAME" label="文章名" required />
             </v-col>
             <v-col cols="12" md="3">
               <v-combobox v-model="tags" :items="categories" chips clearable label="categries" multiple solo>
@@ -205,9 +205,9 @@ import fsCfg from "../assets/js/fw.js";
 export default {
   name: "GoogleMapsView",
   serverUrl: {
-    API_ALL_ARTICLE: "/api/article/GetAllArticle?user={0}",
+    API_ALL_ARTICLE: "/api/Article/GetAllArticles?user={0}",
     API_EDIT: "/api/article/EditArticle",
-    API_GET_CONTENT: "/api/article/id={0}",
+    API_GET_CONTENT: "/api/article/GetArticleContent?id={0}",
     API_DELETE: "/api/article/Delete?id={0}",
     API_NEW_ARTICLE: "/api/article/write",
   },

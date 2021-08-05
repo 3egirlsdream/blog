@@ -93,10 +93,10 @@ import marked from "marked";
 export default {
   name: "UserProfileView",
   serverUrl: {
-    API_GET_ALL_ARTICLE: "/api/article/user={0}&category={1}",
-    API_GET_CONTENT: "/api/article/id={0}",
+    API_GET_ALL_ARTICLE: "/api/article/GetAllArticle?user={0}&category={1}",
+    API_GET_CONTENT: "/api/article/GetArticleContent?id={0}",
     API_GET_ALL_ARTICLE_TO_PAGE:
-      "/api/article/page/user={0}&category={1}&startIndex={2}&length={3}",
+      "/api/article/GetArticlesToPage?user={0}&category={1}&startIndex={2}&length={3}",
   },
   data() {
     return {

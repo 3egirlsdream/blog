@@ -48,11 +48,11 @@ import fsCfg from "../assets/js/fw.js";
 export default {
   name: "TypographyView",
   serverUrl: {
-    API_GET_ALL_ARTICLE: "/api/article/user={0}&category={1}",
-    API_GET_CONTENT: "/api/article/id={0}",
+    API_GET_ALL_ARTICLE: "/api/article/GetAllArticle?user={0}&category={1}",
+    API_GET_CONTENT: "/api/article/GetArticleContent?id={0}",
     API_GET_ALL_ARTICLE_TO_PAGE:
-      "/api/article/page/user={0}&category={1}&startIndex={2}&length={3}",
-    API_GET_CATEGORIES: "/api/article/getarticlecategory",
+      "/api/article/GetArticlesToPage?user={0}&category={1}&startIndex={2}&length={3}",
+    API_GET_CATEGORIES: "/api/article/GetArticleCategory",
   },
   components: {
     MaterialCategoryCard: () => import("../components/MaterialCategoryCard"),
@@ -138,7 +138,8 @@ export default {
               e.categories.push(x);
             });
 
-            let regex = /(http[s]?:\/\/([\w-]+.)+(:\d{1,5})?(\/[\w-\.\/\?%&=]*)?)/gi;
+            let regex =
+              /(http[s]?:\/\/([\w-]+.)+(:\d{1,5})?(\/[\w-\.\/\?%&=]*)?)/gi;
             let urls = e.CONTENT.match(regex);
             let url = "";
             if (urls != undefined && urls != null && urls.length > 0) {
