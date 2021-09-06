@@ -20,7 +20,7 @@
 </style>
 <template>
   <v-container id="regular-tables-view" fluid tag="section">
-    <view-intro heading="主页" link="components/simple-tables" />
+    <view-intro heading="主页" link="components/simple-tables"/>
     <div class="py-3" />
 
     <v-card v-for="(item, index) in articleList" :key="index" icon-small class="my-2" style="overflow:hidden;">
