@@ -289,6 +289,10 @@ export default {
             self.alert = true;
             self.getAllArticle();
           }
+          else{
+            self.msg = res.message.content;
+            self.alert = true;
+          }
         }
       );
     },
