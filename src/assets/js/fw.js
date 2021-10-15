@@ -1,12 +1,12 @@
 'use strict'
 import './framework'
-import Axios from "axios";
+import Axios from 'axios'
 const fsCfg = {
     serverAddr: function () {
          if (window.location.hostname === 'localhost')
-            return 'https://localhost:44389';
+            return 'https://localhost:44389'
           else if (window.location.protocol === 'http:') {
-             return 'http://47.107.186.141:4396'
+             return 'http://42.194.131.197:4396'
           }
          return ''
     },
@@ -21,7 +21,7 @@ const fsCfg = {
                     },
                     100,
                     callback,
-                    response.data
+                    response.data,
                 )
             }
         })
@@ -112,7 +112,40 @@ const fsCfg = {
 
     isLogin: function () {
 
+  },
+
+  match(whatSay) {
+    let maxs = /<[Hh]([1-6])[^>]*>.*?[^/]+/g;
+    //let node = document.getElementsByTagName('h3');
+    //whatSay = whatSay.replaceAll('>',">\n");
+    var node = whatSay.match(maxs);
+    let nodes = [];
+    if(node == undefined) return;
+    let min = 10000;
+    for (let i = 0; i < node.length; i++) {
+      let x = node[i];
+      let index = parseInt(x[2]);
+      let idx = x.indexOf('"');
+      x = x.substring(idx + 1, x.length);
+      idx = x.indexOf('"');
+
+      if (idx > 0) {
+        x = x.substring(0, idx);
+      }
+
+      min = Math.min(min, index);
+
+      nodes.push({
+        index: index,
+        id: x,
+      });
     }
+
+    nodes.forEach((c) => {
+      c.index -= min;
+    });
+    console.log(nodes)
+  },
 }
 
 export default fsCfg

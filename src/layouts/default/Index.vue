@@ -1,12 +1,12 @@
 <template>
-  <v-app>
+  <v-app class="overflow-hidden">
     <default-bar />
 
-    <default-drawer />
+    <!-- <default-drawer /> -->
 
     <default-view />
 
-    <default-footer />
+    <!-- <default-footer /> -->
 
     <!-- <default-settings /> -->
   </v-app>

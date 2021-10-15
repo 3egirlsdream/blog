@@ -1,7 +1,9 @@
 <template>
   <v-container id="user-profile-view" fluid tag="section">
     <v-row justify="center">
-      <v-col cols="12" md="8">
+      <v-col cols="12" md="2">
+      </v-col>
+      <v-col cols="12" md="7">
         <material-card color="grey" icon="mdi-twitter">
           <template #title>
             {{ detail.ARTICLE_NAME }}
@@ -53,9 +55,9 @@
         </material-card>
       </v-col>
 
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="3">
         <div :class="flag ? 'mobile' : ''">
-          <app-card class="mt-4 text-center">
+          <app-card class="mt-3 text-center">
             <!-- <v-img
               class="rounded-circle elevation-6 mt-n12 d-inline-block"
               src="https://demos.creative-tim.com/vue-material-dashboard/img/marc.aba54d65.jpg"

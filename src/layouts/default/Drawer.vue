@@ -1,10 +1,12 @@
 <template>
+<v-card>
   <v-navigation-drawer
     id="default-drawer"
     v-model="drawer"
+    color="#2a579a"
     :dark="dark"
     :right="$vuetify.rtl"
-    :src="img"
+
     :mini-variant.sync="mini"
     mini-variant-width="80"
     app
@@ -12,7 +14,7 @@
   >
 
     <!-- 半模糊效果 -->
-    <template
+    <!-- <template
       v-if="drawerImage"
       #img="props"
     >
@@ -21,7 +23,7 @@
         :gradient="gradient"
         v-bind="props"
       />
-    </template>
+    </template> -->
 
     <div class="px-2">
       <default-drawer-header />
@@ -60,6 +62,7 @@
 
     <div class="pt-12" />
   </v-navigation-drawer>
+</v-card>
 </template>
 
 <script>

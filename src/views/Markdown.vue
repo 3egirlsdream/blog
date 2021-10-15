@@ -56,9 +56,6 @@ code {
         <v-combobox v-model="tags" :items="categories" chips clearable label="categries" multiple solo>
           <template v-slot:selection="{ attrs, item, select, selected, index }">
             <v-chip v-bind="attrs" :input-value="selected" close label text-color="white" :color="color[index]" @click="select" @click:close="remove(item)">
-              <v-icon left>
-                mdi-label
-              </v-icon>
               <font>{{ item }}</font>&nbsp;
             </v-chip>
           </template>
