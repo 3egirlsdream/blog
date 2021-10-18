@@ -66,6 +66,7 @@
 
             <v-card-text class="text-left">
               <h5 class="text-h5 mb-2 text--secondary text-center">本文内容</h5>
+              <v-divider class="mb-2" />
               <a class="contents text--secondary text-left" style="text-decoration: none" :href="'#' + node.id" v-for="(node, index) in nodes" :key="index">
                 <font><span style="margin-left: 15px" v-for="j in node.index" :key="j">
                     <font class="white" v-html="whitespace">{{
@@ -78,6 +79,7 @@
           <app-card class="mt-4 text-center">
             <v-card-text class="text-left">
               <h5 class="text-h5 mb-2 text--secondary text-center">相关文章</h5>
+              <v-divider class="mb-2" />
               <a v-for="(title, index) in articles" :key="index" @click="gotopage(title.id)" class="text--secondary text-left">{{ title.title }}<br />
               </a>
             </v-card-text>
@@ -123,7 +125,9 @@ export default {
   },
   mounted: function () {
     let self = this;
-    this.loadData();
+    this.loadData().then(() => {
+      return this.getAllArticle();
+    });
     this.isPC();
     const link = document.createElement("link");
     link.type = "text/css";
@@ -131,7 +135,7 @@ export default {
     link.href =
       "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.css";
     document.head.appendChild(link);
-    this.getAllArticle();
+
     window.onresize = function () {
       self.isPC();
     };
@@ -143,7 +147,7 @@ export default {
       //whatSay = whatSay.replaceAll('>',">\n");
       var node = whatSay.match(maxs);
       this.nodes = [];
-      if(node == undefined) return;
+      if (node == undefined) return;
       let min = 10000;
       for (let i = 0; i < node.length; i++) {
         let x = node[i];
@@ -169,21 +173,28 @@ export default {
       });
     },
     loadData() {
-      let self = this;
-      var url = framework.strFormat(
-        this.$options.serverUrl.API_GET_CONTENT,
-        self.id
-      );
-      fsCfg.getData(url, function (res) {
-        if (res.success) {
-          self.detail = res.data;
-          self.detail.DATETIME_CREATED = self.detail.DATETIME_CREATED.replace(
-            "T",
-            " "
+      return new Promise((resolve, reject) => {
+        try {
+          let self = this;
+          var url = framework.strFormat(
+            this.$options.serverUrl.API_GET_CONTENT,
+            self.id
           );
-          self.detail.CONTENT_TRANSFERED = marked(self.detail.CONTENT);
-          self.detail.categories = self.detail.ARTICLE_CATEGORY.split(";");
-          self.match(self.detail.CONTENT_TRANSFERED);
+          fsCfg.getData(url, function (res) {
+            if (res.success) {
+              self.detail = res.data;
+              self.detail.DATETIME_CREATED =
+                self.detail.DATETIME_CREATED.replace("T", " ");
+              self.detail.CONTENT_TRANSFERED = marked(self.detail.CONTENT);
+              self.detail.categories = self.detail.ARTICLE_CATEGORY.split(";");
+              self.match(self.detail.CONTENT_TRANSFERED);
+              resolve();
+            } else {
+              reject(res.message.content);
+            }
+          });
+        } catch (err) {
+          reject(err);
         }
       });
     },
@@ -192,7 +203,7 @@ export default {
       var url = framework.strFormat(
         this.$options.serverUrl.API_GET_ALL_ARTICLE,
         "cxk",
-        "全部"
+        self.detail.categories[0]
       );
       fsCfg.getData(url, function (res) {
         if (res.success) {

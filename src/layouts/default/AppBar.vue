@@ -9,16 +9,21 @@
       <v-toolbar-title>
         <v-btn to="/" text color="#2a579a" large><font color="#fff">从入门到放弃</font></v-btn>
       </v-toolbar-title>
-      <v-menu v-for="([text, rounded, show], index) in btns" :key="text" rounded="lg" offset-y>
+      <v-menu v-for="([text, icon, show, to], index) in btns" :key="index" offset-y :disabled="!show">
         <template v-slot:activator="{ attrs, on }">
-          <v-btn large text color="grey" class="white--text ma-2 font-weight-bold h6" v-bind="attrs" v-on="on">
-            <v-icon left dark>mdi-google-home</v-icon>{{ text }}
+          <v-btn text color="grey" class="white--text ma-2 font-weight-bold h6" v-bind="attrs" v-on="on" :to="to">
+            <v-icon left dark>mdi-{{icon}}</v-icon>{{ text }}
             <v-icon right dark v-show="show">mdi-menu-down</v-icon>
           </v-btn>
         </template>
 
         <v-list>
           <v-list-item v-for="item in items" :key="item" link>
+            <v-list-item-action>
+                <v-btn x-small class="ma-0" text icon color="red lighten-2">
+                  <v-icon>mdi-thumb-up</v-icon>
+                </v-btn>
+           </v-list-item-action>
             <v-list-item-title v-text="item"></v-list-item-title>
           </v-list-item>
         </v-list>
@@ -82,9 +87,9 @@ export default {
   },
   data: () => ({
     btns: [
-      ["主页", "0", false],
-      ["分类", "lg", true],
-      ["其他", "b-xl", true],
+      ["主页", "home", false, '/'],
+      ["分类", "shape", false, '/components/categries'],
+      ["标签", "tag", true, ''],
     ],
     items: [...Array(4)].map((_, i) => `Item ${i}`),
   }),

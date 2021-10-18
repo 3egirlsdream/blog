@@ -2,7 +2,9 @@
   <v-app>
     <v-container>
       <v-row justify="center">
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="2">
+        </v-col>
+        <v-col cols="12" md="7">
           <v-row no-gutters>
             <template v-for="(item, index) in articleList">
               <v-col :key="index">
@@ -17,7 +19,7 @@
             </template>
           </v-row>
         </v-col>
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="3">
           <template>
             <v-sheet elevation="1" width="256" class="mt-5">
               <v-navigation-drawer floating permanent>
@@ -103,10 +105,10 @@ export default {
       let url = this.$options.serverUrl.API_GET_CATEGORIES;
       fsCfg.getData(url, function (res) {
         if (res.success) {
-          self.categories = [{ title: "全部", icon: "mdi-file" }];
+          self.categories = [{ title: "全部", icon: "mdi-tag" }];
           for (let index = 0; index < res.data.length; index++) {
             const element = res.data[index];
-            var m = { title: element, icon: "mdi-file" };
+            var m = { title: element, icon: "mdi-tag" };
             self.categories.push(m);
           }
         }
