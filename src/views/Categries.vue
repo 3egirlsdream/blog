@@ -103,7 +103,7 @@ export default {
     getCategories() {
       let self = this;
       let url = this.$options.serverUrl.API_GET_CATEGORIES;
-      fsCfg.getData(url, function (res) {
+      fsCfg.http('get', url).then((res)=>{
         if (res.success) {
           self.categories = [{ title: "全部", icon: "mdi-tag" }];
           for (let index = 0; index < res.data.length; index++) {
@@ -126,7 +126,7 @@ export default {
         this.curPage,
         this.Length
       );
-      fsCfg.getData(url, function (res) {
+      fsCfg.http('get', url).then((res)=>{
         if (res.success) {
           self.articleList = res.data.data;
           self.totalCount = res.data.totalCount;

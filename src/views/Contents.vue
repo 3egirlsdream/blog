@@ -180,7 +180,7 @@ export default {
             this.$options.serverUrl.API_GET_CONTENT,
             self.id
           );
-          fsCfg.getData(url, function (res) {
+          fsCfg.http("get", url).then((res) => {
             if (res.success) {
               self.detail = res.data;
               self.detail.DATETIME_CREATED =
@@ -205,7 +205,7 @@ export default {
         "cxk",
         self.detail.categories[0]
       );
-      fsCfg.getData(url, function (res) {
+      fsCfg.http("get", url).then((res) => {
         if (res.success) {
           for (let index = 0; index < res.data.length; index++) {
             const element = res.data[index];

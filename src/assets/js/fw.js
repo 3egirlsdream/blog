@@ -1,18 +1,43 @@
 'use strict'
 import './framework'
-import Axios from 'axios'
+import axios from 'axios'
 const fsCfg = {
     serverAddr: function () {
          if (window.location.hostname === 'localhost')
-            return 'https://localhost:44389'
+            return 'https://localhost:5000'
           else if (window.location.protocol === 'http:') {
              return 'http://42.194.131.197:4396'
           }
          return ''
     },
+
+  http: function (method, url, param = {}) {
+    return new Promise((resolve, reject) => {
+      const config = {
+        url: url,
+        method: method,
+        baseURL: this.serverAddr(),
+        timeout: 30000,
+        headers: {
+          authorization:''
+        }
+      };
+      let token = framework.getStorage("__token__");
+      if (token) {
+        config.headers.authorization = token
+      }
+
+      return axios(config).then((response) => {
+        resolve(response.data);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  },
+
     getDataWithoutCheck: function (url, callback) {
         console.log('GET URL:' + url)
-        Axios.get(url)
+        axios.get(url)
           .then(function (response) {
             if (response != null) {
                 setTimeout(
@@ -35,10 +60,10 @@ const fsCfg = {
         console.log('GET URL:' + this.serverAddr() + url)
         let user = 'cxk'//framework.getStorage('user');
         let pwd = '123455'//framework.getStorage('pwd')
-        let u = framework.strFormat('/api/values/login/user={0}&pwd={1}', user, pwd);
-        Axios.get(this.serverAddr() + u)
+        let u = framework.strFormat('/api/User/Login?user={0}&pwd={1}', user, pwd);
+        axios.get(this.serverAddr() + u)
             .then(() => {
-                Axios.get(this.serverAddr() + url)
+                axios.get(this.serverAddr() + url)
                     .then(response => {
                         if (response != null) {
                             setTimeout(
@@ -68,7 +93,7 @@ const fsCfg = {
     },
 
     postData: function (url, data, callback) {
-        Axios.post(this.serverAddr() + url, data, {
+        axios.post(this.serverAddr() + url, data, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -92,7 +117,7 @@ const fsCfg = {
 
     uploadImage: function (filepath, data, callback) {
         var url = "https://gitee.com/api/v5/repos/eeegirlsdream/picture/contents/" + filepath;
-        Axios.post(url, data, {
+        axios.post(url, data, {
             headers: {
                 "Content-Type": "application/json"
             }

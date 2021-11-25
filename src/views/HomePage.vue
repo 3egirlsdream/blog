@@ -173,7 +173,7 @@ export default {
         this.curPage,
         this.pageSize
       );
-      fsCfg.getData(url, function (res) {
+      fsCfg.http("get", url).then((res) => {
         if (res.success) {
           self.articleList = res.data.data;
           self.totalCount = res.data.totalCount;
@@ -224,7 +224,20 @@ export default {
   },
   mounted: function () {
     let self = this;
-    this.getAllArticle();
+    let url = "/api/Auth/GetToken?name={0}&pwd={1}";
+    url = framework.strFormat(url, "cxk", "");
+    fsCfg
+      .http("get", url)
+      .then((res) => {
+        framework.setStorage("__token__", res.data);
+      })
+      .then(() => {
+        this.getAllArticle();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     self.contentSize = framework.isPC() ? 200 : 80;
     window.onresize = function () {
       let f = framework.isPC();
@@ -235,5 +248,6 @@ export default {
       }
     };
   },
+  created() {},
 };
 </script>
