@@ -58,7 +58,6 @@ export default {
   name: "DefaultBar",
 
   components: {
-    DefaultContent: () => import("../../views/HomePage1.vue"),
     DefaultAccount: () =>
       import(
         /* webpackChunkName: "default-account" */
