@@ -225,11 +225,13 @@ export default {
   mounted: function () {
     let self = this;
     let url = "/api/Auth/GetToken?name={0}&pwd={1}";
-    url = framework.strFormat(url, "cxk", "");
+    url = framework.strFormat(url, "cxk", "cxk");
     fsCfg
       .http("get", url)
       .then((res) => {
-        framework.setStorage("__token__", res.data);
+        if(res.success){
+          framework.setStorage("__token__", res.data);
+        }
       })
       .then(() => {
         this.getAllArticle();
@@ -248,6 +250,5 @@ export default {
       }
     };
   },
-  created() {},
 };
 </script>

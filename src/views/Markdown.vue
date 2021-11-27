@@ -192,6 +192,10 @@ code {
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="d_login" width="400" height="400">
+      <loginCard @cancel="d_login = false" @logined="logined()"/>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -208,11 +212,15 @@ export default {
     API_DELETE: "/api/article/Delete?id={0}",
     API_NEW_ARTICLE: "/api/article/write",
   },
+  components:{
+    loginCard :() => import('../components/LoginCard.vue')
+  },
   data: () => ({
     lastId: "",
     nextId: "",
     tags: [],
     categories: [],
+    d_login:false,
     d_create: false,
     alert: false,
     dialog: false,
@@ -257,13 +265,17 @@ export default {
         this.$options.serverUrl.API_DELETE,
         this.id
       );
-      fsCfg.getData(url, function (res) {
+      fsCfg.http('get', url).then((res)=>{
         if (res.success) {
           self.msg = "删除成功！";
           self.alert = true;
           self.getAllArticle();
+          self.dialog = false;
         }
-        self.dialog = false;
+        else{
+          self.d_login = true;
+        }
+
       });
     },
     submit(id, name) {
@@ -277,21 +289,18 @@ export default {
         next: this.nextId,
       };
 
-      fsCfg.postData(
+      fsCfg.http('post',
         this.$options.serverUrl.API_EDIT,
-        JSON.stringify(data),
-        function (res) {
+        data).then((res)=>{
           if (res.success) {
             self.msg = "更新成功";
             self.alert = true;
             self.getAllArticle();
           }
           else{
-            self.msg = res.message.content;
-            self.alert = true;
+            self.d_login = true;
           }
-        }
-      );
+        });
     },
     create() {
       let self = this;
@@ -304,18 +313,17 @@ export default {
         next: this.nextId,
       };
 
-      fsCfg.postData(
-        this.$options.serverUrl.API_NEW_ARTICLE,
-        JSON.stringify(data),
-        function (res) {
-          if (res.success) {
+      fsCfg.http('post', this.$options.serverUrl.API_NEW_ARTICLE, data).then((res)=>{
+        if (res.success) {
             self.msg = "新增成功";
             self.alert = true;
             self.getAllArticle();
             self.d_create = false;
           }
-        }
-      );
+          else{
+            self.d_login = true;
+          }
+      });
     },
     getAllArticle() {
       let self = this;
@@ -323,7 +331,7 @@ export default {
         this.$options.serverUrl.API_ALL_ARTICLE,
         "cxk"
       );
-      fsCfg.getData(url, function (res) {
+      fsCfg.http('get', url).then((res)=>{
         if (res.success) {
           self.articleList = res.data;
           for (let index = 0; index < res.data.length; index++) {
@@ -334,6 +342,10 @@ export default {
             });
           }
         }
+        else{
+          self.msg = res.message.content;
+          self.alert = true;
+        }
       });
     },
     loadContent(id) {
@@ -342,7 +354,7 @@ export default {
         this.$options.serverUrl.API_GET_CONTENT,
         id
       );
-      fsCfg.getData(url, function (res) {
+      fsCfg.http('get', url).then((res)=>{
         if (res.success) {
           self.detail = res.data;
           self.input = self.detail.CONTENT;
@@ -351,8 +363,16 @@ export default {
           self.lastId = self.detail.LAST_ESSAY;
           self.nextId = self.detail.NEXT_ESSAY;
         }
+        else{
+          self.d_login = true;
+        }
       });
     },
+
+    logined(){
+      this.d_login = false;
+      this.getAllArticle();
+    }
   },
   mounted: function () {
     const link = document.createElement("link");
@@ -361,7 +381,8 @@ export default {
     link.href =
       "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.css";
     document.head.appendChild(link);
-    this.getAllArticle();
+    this.d_login = true;
+    //this.getAllArticle();
   },
   watch: {
     tags() {

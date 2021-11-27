@@ -6,6 +6,9 @@ import './plugins'
 import store from './store'
 import { sync } from 'vuex-router-sync'
 import '../src/assets/css/style.css'
+import fsCfg from './assets/js/fw';
+
+Vue.prototype.fsCfg = fsCfg;
 
 Vue.config.productionTip = false
 

@@ -4,7 +4,7 @@ import axios from 'axios'
 const fsCfg = {
     serverAddr: function () {
          if (window.location.hostname === 'localhost')
-            return 'https://localhost:5000'
+            return 'https://localhost:44389'
           else if (window.location.protocol === 'http:') {
              return 'http://42.194.131.197:4396'
           }
@@ -14,19 +14,19 @@ const fsCfg = {
   http: function (method, url, param = {}) {
     return new Promise((resolve, reject) => {
       const config = {
-        url: url,
+        url: this.serverAddr() + url,
+        data: param,
         method: method,
-        baseURL: this.serverAddr(),
+        //baseURL: this.serverAddr(),
         timeout: 30000,
         headers: {
           authorization:''
         }
       };
       let token = framework.getStorage("__token__");
-      if (token) {
+      if (token != null && token.length > 0) {
         config.headers.authorization = token
       }
-
       return axios(config).then((response) => {
         resolve(response.data);
       }).catch((err) => {
