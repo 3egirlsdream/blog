@@ -1,100 +1,76 @@
 <template>
-  <v-card color="grey lighten-4"
+  <v-app-bar
+    id="default-app-bar"
+    app
+    absolute
+    class="v-bar--underline"
+    color="transparent"
+    :clipped-left="$vuetify.rtl"
+    :clipped-right="!$vuetify.rtl"
+    height="70"
     flat
-    height="auto"
-    tile>
-    <v-toolbar color="#2a579a">
-      <v-spacer></v-spacer>
+  >
+    <v-app-bar-nav-icon
+      class="hidden-md-and-up"
+      @click="drawer.drawer = !drawer.drawer"
+    />
 
-      <v-toolbar-title>
-        <v-btn to="/" text color="#2a579a" large><font color="#fff">从入门到放弃</font></v-btn>
-      </v-toolbar-title>
-      <v-menu v-for="([text, icon, show, to], index) in btns" :key="index" offset-y :disabled="!show">
-        <template v-slot:activator="{ attrs, on }">
-          <v-btn text color="grey" class="white--text ma-2 font-weight-bold h6" v-bind="attrs" v-on="on" :to="to">
-            <v-icon left dark>mdi-{{icon}}</v-icon>{{ text }}
-            <v-icon right dark v-show="show">mdi-menu-down</v-icon>
-          </v-btn>
-        </template>
+    <default-drawer-toggle class="hidden-sm-and-down" />
 
-        <v-list>
-          <v-list-item v-for="item in items" :key="item" link>
-            <v-list-item-action>
-                <v-btn x-small class="ma-0" text icon color="red lighten-2">
-                  <v-icon>mdi-thumb-up</v-icon>
-                </v-btn>
-           </v-list-item-action>
-            <v-list-item-title v-text="item"></v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+    <v-toolbar-title
+      class="font-weight-light text-h5"
+      v-text="name"
+    />
 
-      <v-spacer />
+    <v-spacer />
 
-      <default-search class="hidden-sm-and-down" />
+    <default-search class="hidden-sm-and-down" />
 
-      <default-go-home />
-      <v-switch v-model="$vuetify.theme.dark" class="ma-2 pa-0" color="secondary" label="Dark Mode" hide-details />
-    </v-toolbar>
+    <default-go-home />
 
-  </v-card>
-  <!-- <v-sheet
-      id="scrolling-techniques-7"
-      class="overflow-y-auto"
-      max-height="600"
-    >
-      <v-container style="height: 1500px;">
+    <default-notifications />
 
-      </v-container>
-    </v-sheet> -->
-
+    <default-account />
+  </v-app-bar>
 </template>
 
 <script>
-// Utilities
-import { get, sync } from "vuex-pathify";
+  // Utilities
+  //import { get, sync } from 'vuex-pathify'
 
-export default {
-  name: "DefaultBar",
+  export default {
+    name: 'DefaultBar',
 
-  components: {
-    DefaultAccount: () =>
-      import(
+    components: {
+      DefaultAccount: () => import(
         /* webpackChunkName: "default-account" */
-        "./widgets/Account"
+        './widgets/Account'
       ),
-    DefaultDrawerToggle: () =>
-      import(
+      DefaultDrawerToggle: () => import(
         /* webpackChunkName: "default-drawer-toggle" */
-        "./widgets/DrawerToggle"
+        './widgets/DrawerToggle'
       ),
-    DefaultGoHome: () =>
-      import(
+      DefaultGoHome: () => import(
         /* webpackChunkName: "default-go-home" */
-        "./widgets/GoHome"
+        './widgets/GoHome'
       ),
-    DefaultNotifications: () =>
-      import(
+      DefaultNotifications: () => import(
         /* webpackChunkName: "default-notifications" */
-        "./widgets/Notifications"
+        './widgets/Notifications'
       ),
-    DefaultSearch: () =>
-      import(
+      DefaultSearch: () => import(
         /* webpackChunkName: "default-search" */
-        "./widgets/Search"
+        './widgets/Search'
       ),
-  },
-  data: () => ({
-    btns: [
-      ["主页", "home", false, '/'],
-      ["分类", "shape", false, '/components/categries'],
-      ["标签", "tag", true, ''],
-    ],
-    items: [...Array(4)].map((_, i) => `Item ${i}`),
-  }),
-  computed: {
-    ...sync("app", ["drawer", "mini"]),
-    name: get("route/title"),
-  },
-};
+    },
+
+    computed: {
+        drawer(){
+            return this.$store.getters.getDrawer;
+        },
+        name(){
+            return this.$route.name;
+        },
+    },
+  }
 </script>

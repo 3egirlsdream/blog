@@ -4,7 +4,6 @@ import Vue from 'vue';
 import App from '../../blog-vuetify-master/App.vue'
 import router from './routes.js'
 import store from './store.js'
-import '../src/css/style.css'
 
 // 引入vuetify
 import vuetify  from "./vuetify";
@@ -20,6 +19,5 @@ new Vue({
   router,
   store,
   i18n,
-  vuetify,
-  render: h => h(App),
+  vuetify
 }).$mount('#app'); //将这个实例挂载到id=app的根元素上

@@ -14,25 +14,26 @@
         v-bind="attrs"
         v-on="on"
       >
-        <v-badge
+        <!-- <v-badge
           bordered
           color="red"
           overlap
         >
           <template v-slot:badge>
             <span>5</span>
-          </template>
+          </template> -->
 
           <v-icon>mdi-bell</v-icon>
-        </v-badge>
+        <!-- </v-badge> -->
       </v-btn>
     </template>
 
     <v-list
       flat
       nav
+      v-show="false"
     >
-      <app-bar-item
+      <v-list-item
         v-for="(n, i) in notifications"
         :key="i"
         link
@@ -40,7 +41,7 @@
         <v-list-item-content>
           <v-list-item-title>{{ n }} </v-list-item-title>
         </v-list-item-content>
-      </app-bar-item>
+      </v-list-item>
     </v-list>
   </v-menu>
 </template>

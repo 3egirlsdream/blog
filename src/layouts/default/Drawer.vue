@@ -1,82 +1,72 @@
 <template>
-<v-card>
-  <v-navigation-drawer
-    id="default-drawer"
-    v-model="drawer"
-    color="#2a579a"
-    :dark="dark"
-    :right="$vuetify.rtl"
-
-    :mini-variant.sync="mini"
-    mini-variant-width="80"
-    app
-    width="260"
-  >
-
-    <!-- 半模糊效果 -->
-    <!-- <template
-      v-if="drawerImage"
-      #img="props"
+    <v-navigation-drawer
+        id="default-drawer"
+        v-model="drawer.drawer"
+        :dark="personal.dark"
+        :right="$vuetify.rtl"
+        :src="drawer.drawerImage ? personal.images : ''"
+        :mini-variant.sync="drawer.mini"
+        mini-variant-width="80"
+        app
+        width="260"
     >
-      <v-img
-        :key="img"
-        :gradient="gradient"
-        v-bind="props"
-      />
-    </template> -->
-
-    <div class="px-2">
-      <default-drawer-header />
-
-      <v-divider class="mx-3 mb-2" />
-
-      <default-list :items="items" />
-    </div>
-
-    <!-- <template #append>
-      <div class="pa-4 text-center">
-        <app-btn
-          class="text-none mb-4"
-          color="white"
-          href="https://vuetifyjs.com"
-          small
-          text
+        <template
+            v-if="drawer.drawerImage"
+            #img="props"
         >
-          Documentation
-        </app-btn>
+            <v-img
+                :key="personal.images"
+                :gradient="personal.gradient"
+                v-bind="props"
+            />
+        </template>
 
-        <app-btn
-          block
-          class="text-none"
-          color="secondary"
-          href="https://store.vuetifyjs.com/products/vuetify-material-dashboard-pro"
-        >
-          <v-icon left>
-            mdi-package-up
-          </v-icon>
+        <div class="px-2">
+            <default-drawer-header />
 
-          Upgrade to Pro
-        </app-btn>
-      </div>
-    </template> -->
+            <v-divider class="mx-3 mb-2" />
 
-    <div class="pt-12" />
-  </v-navigation-drawer>
-</v-card>
+            <default-list :items="drawer.items" />
+        </div>
+
+        <template #append >
+            <div class="pa-4 text-center" v-show="false">
+                <v-btn
+                    class="text-none mb-4"
+                    color="white"
+                    href="https://vuetifyjs.com"
+                    small
+                    text
+                >
+                    Documentation
+                </v-btn>
+
+                <v-btn
+                    block
+                    class="text-none"
+                    color="secondary"
+                    href="https://store.vuetifyjs.com/products/vuetify-material-dashboard-pro"
+                >
+                    <v-icon left>
+                        mdi-package-up
+                    </v-icon>
+
+                    Upgrade to Pro
+                </v-btn>
+            </div>
+        </template>
+
+        <div class="pt-12" />
+    </v-navigation-drawer>
 </template>
 
 <script>
   // Utilities
-  import { get, sync } from 'vuex-pathify'
+  //import { get, sync } from 'vuex-pathify'
 
   export default {
     name: 'DefaultDrawer',
-    data(){
-      return {
-        img:"https://rmt.dogedoge.com/fetch/fluid/storage/bg/vdysjx.png?w=1920&fmt=webp"
-        // items:["a", "b"]
-      }
-    },
+
     components: {
       DefaultDrawerHeader: () => import(
         /* webpackChunkName: "default-drawer-header" */
@@ -89,20 +79,12 @@
     },
 
     computed: {
-      ...get('user', [
-        'dark',
-        'gradient',
-        'image',
-      ]),
-      ...get('app', [
-        'items',
-        'version',
-      ]),
-      ...sync('app', [
-        'drawer',
-        'drawerImage',
-        'mini',
-      ]),
+        drawer(){
+            return this.$store.getters.getDrawer;
+        },
+        personal(){
+            return this.$store.getters.getPersonal;
+        },
     },
   }
 </script>

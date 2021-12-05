@@ -41,7 +41,7 @@ code {
       <v-col cols="12" md="2">
         <v-switch v-model="show" label="预览"></v-switch>
       </v-col>
-      <v-col cols="12" md="7">
+      <v-col cols="12" md="10">
         <v-text-field v-model="detail.ARTICLE_NAME" label="文章名" required></v-text-field>
       </v-col>
     </v-row>
@@ -52,7 +52,7 @@ code {
       <v-col cols="12" md="3">
         <v-select v-model="nextId" :items="articleList" item-text="ARTICLE_NAME" item-value="ID" label="下一篇" solo></v-select>
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" md="6">
         <v-combobox v-model="tags" :items="categories" chips clearable label="categries" multiple solo>
           <template v-slot:selection="{ attrs, item, select, selected, index }">
             <v-chip v-bind="attrs" :input-value="selected" close label text-color="white" :color="color[index]" @click="select" @click:close="remove(item)">
@@ -63,8 +63,8 @@ code {
       </v-col>
     </v-row>
     <v-row justify="left">
-      <v-col cols="12" md="3">
-        <v-card class="mx-auto" max-width="256">
+      <v-col cols="12" md="2">
+        <v-card>
           <v-navigation-drawer permanent>
             <v-list-item>
               <v-row class="my-1">
@@ -94,14 +94,14 @@ code {
           </v-navigation-drawer>
         </v-card>
       </v-col>
-      <v-col cols="12" md="8" v-show="!show">
+      <v-col cols="12" md="10" v-show="!show">
         <v-card height="100vh">
           <div id="editor">
             <textarea :value="input" @input="update"></textarea>
           </div>
         </v-card>
       </v-col>
-      <v-col cols="12" md="8" v-show="show">
+      <v-col cols="12" md="10" v-show="show">
         <v-card class="pa-3">
           <v-card-title>
           </v-card-title>
@@ -193,15 +193,16 @@ code {
       </v-card>
     </v-dialog>
 
-
   </v-container>
 </template>
+
 
 <script>
 import marked from "marked";
 import framework from "../../src/api/framework.js";
 import fsCfg from "../../src/api/http.js";
-var _ = require('lodash');
+var _ = require("lodash");
+import { EventBus } from "../event-bus.js";
 export default {
   name: "Markdown",
   serverUrl: {
@@ -211,7 +212,7 @@ export default {
     API_DELETE: "/api/article/Delete?id={0}",
     API_NEW_ARTICLE: "/api/article/write",
   },
-  components:{
+  components: {
     //loginCard :() => import('../components/LoginCard.vue')
   },
   data: () => ({
@@ -219,7 +220,7 @@ export default {
     nextId: "",
     tags: [],
     categories: [],
-    d_login:false,
+    d_login: false,
     d_create: false,
     alert: false,
     dialog: false,
@@ -264,17 +265,21 @@ export default {
         this.$options.serverUrl.API_DELETE,
         this.id
       );
-      fsCfg.http('get', url).then((res)=>{
+      fsCfg.http("get", url).then((res) => {
         if (res.success) {
-          self.msg = "删除成功！";
-          self.alert = true;
+          EventBus.$emit("open-message", {
+            text: "删除成功!",
+            type: "success",
+          });
           self.getAllArticle();
           self.dialog = false;
-        }
-        else{
+        } else {
+          EventBus.$emit("open-message", {
+            text: res.message.content,
+            type: "error",
+          });
           self.d_login = true;
         }
-
       });
     },
     submit(id, name) {
@@ -288,18 +293,21 @@ export default {
         next: this.nextId,
       };
 
-      fsCfg.http('post',
-        this.$options.serverUrl.API_EDIT,
-        data).then((res)=>{
-          if (res.success) {
-            self.msg = "更新成功";
-            self.alert = true;
-            self.getAllArticle();
-          }
-          else{
-            self.d_login = true;
-          }
-        });
+      fsCfg.http("post", this.$options.serverUrl.API_EDIT, data).then((res) => {
+        if (res.success) {
+          EventBus.$emit("open-message", {
+            text: "更新成功!",
+            type: "success",
+          });
+          self.getAllArticle();
+        } else {
+          EventBus.$emit("open-message", {
+            text: res.message.content,
+            type: "error",
+          });
+          self.d_login = true;
+        }
+      });
     },
     create() {
       let self = this;
@@ -312,17 +320,24 @@ export default {
         next: this.nextId,
       };
 
-      fsCfg.http('post', this.$options.serverUrl.API_NEW_ARTICLE, data).then((res)=>{
-        if (res.success) {
-            self.msg = "新增成功";
-            self.alert = true;
+      fsCfg
+        .http("post", this.$options.serverUrl.API_NEW_ARTICLE, data)
+        .then((res) => {
+          if (res.success) {
+            EventBus.$emit("open-message", {
+              text: "新增成功!",
+              type: "success",
+            });
             self.getAllArticle();
             self.d_create = false;
-          }
-          else{
+          } else {
+            EventBus.$emit("open-message", {
+              text: res.message.content,
+              type: "error",
+            });
             self.d_login = true;
           }
-      });
+        });
     },
     getAllArticle() {
       let self = this;
@@ -330,7 +345,7 @@ export default {
         this.$options.serverUrl.API_ALL_ARTICLE,
         "cxk"
       );
-      fsCfg.http('get', url).then((res)=>{
+      fsCfg.http("get", url).then((res) => {
         if (res.success) {
           self.articleList = res.data;
           for (let index = 0; index < res.data.length; index++) {
@@ -340,10 +355,11 @@ export default {
               if (!self.categories.includes(x)) self.categories.push(x);
             });
           }
-        }
-        else{
-          self.msg = res.message.content;
-          self.alert = true;
+        } else {
+          EventBus.$emit("open-message", {
+            text: res.message.content,
+            type: "success",
+          });
         }
       });
     },
@@ -353,7 +369,7 @@ export default {
         this.$options.serverUrl.API_GET_CONTENT,
         id
       );
-      fsCfg.http('get', url).then((res)=>{
+      fsCfg.http("get", url).then((res) => {
         if (res.success) {
           self.detail = res.data;
           self.input = self.detail.CONTENT;
@@ -361,17 +377,19 @@ export default {
           self.tags = self.detail.ARTICLE_CATEGORY.split(";");
           self.lastId = self.detail.LAST_ESSAY;
           self.nextId = self.detail.NEXT_ESSAY;
-        }
-        else{
+        } else {
+          EventBus.$emit("open-message", {
+            text: res.message.content,
+            type: "error",
+          });
           self.d_login = true;
         }
       });
     },
 
-    logined(){
+    logined() {
       this.d_login = false;
-
-    }
+    },
   },
   mounted: function () {
     const link = document.createElement("link");

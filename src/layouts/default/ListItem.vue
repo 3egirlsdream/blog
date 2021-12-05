@@ -4,7 +4,7 @@
     :rel="item.href ? 'nofollow' : undefined"
     :target="item.href ? '_blank' : undefined"
     :to="item.to"
-    active-class="indigo darken-1 white--text"
+    active-class="primary white--text"
     link
     class="py-1"
     v-bind="$attrs"
@@ -29,7 +29,7 @@
     </v-list-item-icon>
 
     <v-list-item-content v-if="item.title">
-      <v-list-item-title v-text="item.title"/>
+      <v-list-item-title v-text="item.title" />
     </v-list-item-content>
   </v-list-item>
 </template>

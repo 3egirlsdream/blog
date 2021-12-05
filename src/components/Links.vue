@@ -24,7 +24,11 @@
         md="auto"
       >
         <div class="body-1 font-weight-light pt-6 pt-md-0 text-center">
-          &copy; {{ (new Date()).getFullYear() }}, Powered by .NetCore & Vue
+          &copy; {{ (new Date()).getFullYear() }}, Made by <v-icon>mdi-vuetify</v-icon>
+          <a
+            href="https://vuetifyjs.com/en/about/meet-the-team/#company"
+            class="text-decoration-none"
+          >Vuetify</a>
         </div>
       </v-col>
     </v-row>
@@ -36,7 +40,24 @@
     name: 'Links',
 
     data: () => ({
-      links: [],
+      links: [
+        {
+          href: 'https://vuetifyjs.com/',
+          text: 'Vuetify Docs',
+        },
+        {
+          href: '#',
+          text: 'About Us',
+        },
+        {
+          href: '#',
+          text: 'Blog',
+        },
+        {
+          href: '#',
+          text: 'Licenses',
+        },
+      ],
     }),
   }
 </script>

@@ -8,7 +8,12 @@
     <div
       v-if="link"
       class="body-2 font-weight-light"
-    >An ac a day, keep girls away.
+    >
+      Please checkout the <a
+        :href="`https://vuetifyjs.com/en/${link}`"
+        class="text-decoration-none secondary--text"
+        target="_blank"
+      >full documentation</a>
     </div>
 
     <v-responsive

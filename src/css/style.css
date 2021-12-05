@@ -1,0 +1,17 @@
+.theme--light.v-application code {
+  background-color: transparent !important;
+  color: currentColor;
+}
+.theme--light.v-application kbd {
+  background: #212529;
+  color: #FFFFFF;
+}
+
+.theme--dark.v-application code {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: currentColor;
+}
+.theme--dark.v-application kbd {
+  background: #212529;
+  color: #FFFFFF;
+}
