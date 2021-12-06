@@ -9,7 +9,7 @@ COPY . .
 # production stage
 FROM nginx:stable-alpine as production-stage
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
-ls
+CMD [<"ls">]
 COPY --from=build-stage dist/ /usr/share/nginx/html
 
 EXPOSE 80
