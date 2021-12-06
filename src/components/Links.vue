@@ -57,6 +57,10 @@
           href: '#',
           text: 'Licenses',
         },
+        {
+          href:'https://beian.miit.gov.cn',
+          text:'粤ICP备2021164431号-1'
+        }
       ],
     }),
   }
