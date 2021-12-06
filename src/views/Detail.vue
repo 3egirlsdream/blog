@@ -142,7 +142,7 @@ export default {
     link.type = "text/css";
     link.rel = "stylesheet";
     link.href =
-      "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.css";
+      "http://cdn.thankful.top/github-markdown.css";
     document.head.appendChild(link);
 
     window.onresize = function () {
