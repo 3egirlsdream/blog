@@ -29,6 +29,8 @@
             href="https://vuetifyjs.com/en/about/meet-the-team/#company"
             class="text-decoration-none"
           >Vuetify</a>
+
+           	&amp; <v-icon>mdi-microsoft</v-icon>.NETCore
         </div>
       </v-col>
     </v-row>
@@ -40,24 +42,7 @@
     name: 'Links',
 
     data: () => ({
-      links: [
-        {
-          href: 'https://vuetifyjs.com/',
-          text: 'Vuetify Docs',
-        },
-        {
-          href: '#',
-          text: 'About Us',
-        },
-        {
-          href: '#',
-          text: 'Blog',
-        },
-        {
-          href: '#',
-          text: 'Licenses',
-        },
-        {
+      links: [{
           href:'https://beian.miit.gov.cn',
           text:'粤ICP备2021164431号-1'
         }
