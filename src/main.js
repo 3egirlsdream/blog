@@ -1,7 +1,7 @@
 
 window._ = require('lodash');
 import Vue from 'vue';
-import App from '../../blog-vuetify-master/App.vue'
+import App from '../App.vue'
 import router from './routes.js'
 import store from './store.js'
 import '../src/css/style.css'
