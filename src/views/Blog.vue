@@ -240,7 +240,7 @@ export default {
       "#163438",
     ],
     defaultPic:
-      "https://gitee.com/eeegirlsdream/picture/raw/master/article/IMG20210414-163809334.jpg",
+      "http://cdn.thankful.top/yaofan.jpg",
   }),
   watch: {
     curPage(val) {
